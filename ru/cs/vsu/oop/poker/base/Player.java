@@ -1,3 +1,5 @@
+package ru.cs.vsu.oop.poker.base;
+
 public class Player {
     protected Hand hand;
     protected double budget;

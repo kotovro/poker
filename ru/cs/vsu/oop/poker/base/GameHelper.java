@@ -1,4 +1,4 @@
-import com.sun.source.tree.BreakTree;
+package ru.cs.vsu.oop.poker.base;
 
 public class GameHelper {
     public static void sortHand(Card[] hand){

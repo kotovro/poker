@@ -1,4 +1,4 @@
-import java.util.LinkedList;
+package ru.cs.vsu.oop.poker.base;
 
 public class Hand implements Comparable<Hand> {
 
