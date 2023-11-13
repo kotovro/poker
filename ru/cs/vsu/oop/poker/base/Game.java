@@ -1,16 +1,20 @@
 package ru.cs.vsu.oop.poker.base;
 
-import java.util.LinkedList;
-
 public class Game {
     public final int FINISHED = -1;
+    public final int IN_STREET = -10;
     protected Deck deck;
     protected double bank;
     protected double currentBet;
-    protected double allBets;
     protected int state;
     protected boolean inStreet;
+
+    public Player[] getPlayers() {
+        return players;
+    }
+
     protected Player[] players;
+    protected double betStep = 0;
 
     public Game() {
         this.bank = 0;
@@ -20,7 +24,11 @@ public class Game {
     }
 
     public int getState() {
-        return state;
+        if (!inStreet) {
+            return state;
+        } else {
+            return IN_STREET;
+        }
     }
 
     public double getBank() {
@@ -31,11 +39,42 @@ public class Game {
         return currentBet;
     }
 
-    public double getAllBets() {
-        return allBets;
+    public Player getHumanPlayer() {
+        return players[players.length - 1];
+    }
+    public int getActivePlayersCount() {
+        int activePlayers = 0;
+        for (Player p : players) {
+            if (p.getLastAction() != Player.ACTION_FOLD) {
+                activePlayers++;
+            }
+        }
+        return activePlayers;
     }
 
-    public Player getHumanPlayer() {
-        return players[0];
+    protected void startStreet() {
+        inStreet = true;
+    }
+    protected void stopStreet() {
+        inStreet = false;
+        currentBet = 0;
+        for (Player p: players) {
+            p.clearCurrentBet();
+            if (p.getLastAction() != Player.ACTION_FOLD) {
+                p.setLastAction(Player.ACTION_NONE);
+            }
+        }
+    }
+
+    public double getBetStep() {
+        return this.betStep;
+    }
+
+    public void addToCurrentBet(double bet) {
+        this.currentBet += bet;
+    }
+
+    public void addToBank(double bet) {
+        this.bank += bet;
     }
 }

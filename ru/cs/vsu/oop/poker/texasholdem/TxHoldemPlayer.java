@@ -11,8 +11,10 @@ public class TxHoldemPlayer extends Player {
     }
 
     public TxHoldemPlayer(double budget) {
-        super(budget);
+        super(budget, false);
     }
+
+    public TxHoldemPlayer(double budget, boolean isBot) { super(budget, isBot); }
 
 
     public void findBestHand(Card[] table) {
