@@ -7,7 +7,9 @@ public class Hand implements Comparable<Hand> {
 
 
     public Hand(Card[] hand) {
-        this.hand = hand;
+        for (int i = 0; i < 5; i++) {
+            this.hand[i] = hand[i];
+        }
         this.combo= GameHelper.findBestCombo(hand);
     }
 

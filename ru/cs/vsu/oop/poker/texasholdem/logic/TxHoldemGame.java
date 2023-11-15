@@ -13,13 +13,13 @@ public class TxHoldemGame extends Game {
     private void clearTable() {
         Arrays.fill(table, null);
     }
-    private final int CONTINUE_BETS = 1;
-    private final int STOP_BETS = 0;
-    private final int FINISH_GAME = -1;
-    private final int PREFLOP = 0;
-    private final int FLOP = 1;
-    private final int TERN = 2;
-    private final int REAVER = 3;
+    public static final int CONTINUE_BETS = 1;
+    public static final int STOP_BETS = 0;
+    public static final int FINISH_GAME = -1;
+    private static final int PREFLOP = 0;
+    private static final int FLOP = 1;
+    private static final int TERN = 2;
+    private static final int REAVER = 3;
     public TxHoldemGame(int numberOfBots, double budget) {
         players = new TxHoldemPlayer[numberOfBots + 1];
         players[numberOfBots] = new TxHoldemPlayer(budget);

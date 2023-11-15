@@ -1,6 +1,7 @@
 package ru.cs.vsu.oop.poker.texasholdem.graphics;
 
 import ru.cs.vsu.oop.poker.base.Card;
+import ru.cs.vsu.oop.poker.base.Game;
 import ru.cs.vsu.oop.poker.base.Player;
 import ru.cs.vsu.oop.poker.texasholdem.logic.TxHoldemGame;
 import ru.cs.vsu.oop.poker.texasholdem.logic.TxHoldemPlayer;
@@ -89,11 +90,13 @@ public class TxHoldemForm extends JFrame {
     private JLabel[] cards2 = {lblPlayer1card2, lblPlayer2card2, lblPlayer3card2, lblPlayer4card2, lblPlayer5card2, lblPlayer6card2};
     private JPanel[] botPanels = {panelBot1, panelBot2, panelBot3, panelBot4, panelBot5, panelBot6};
     private JLabel[] tableCards = {lblTableCard1, lblTableCard2, lblTableCard3, lblTableCard4, lblTableCard5};
+    private TxHoldemPlayer humanPlayer;
 
     public TxHoldemForm() {
         boolean isDebug = true;
         game = new TxHoldemGame(4, 100);
         TxHoldemPlayer[] players = (TxHoldemPlayer[]) game.getPlayers();
+        humanPlayer = players[players.length - 1];
         initLabels();
         game.doStep(Player.ACTION_NONE);
         for (int i = 0; i < players.length - 1; i++) {
@@ -103,20 +106,38 @@ public class TxHoldemForm extends JFrame {
             cards2[i].setIcon(getIconForCard(players[i].getOwnHand(1), isDebug));
             cards2[i].setText("");
         }
-        lblHumanCard1.setIcon(getIconForCard(players[players.length - 1].getOwnHand(0), true));
-        lblHumanCard2.setIcon(getIconForCard(players[players.length - 1].getOwnHand(1), true));
+        lblHumanCard1.setIcon(getIconForCard(humanPlayer.getOwnHand(0), true));
+        lblHumanCard2.setIcon(getIconForCard(humanPlayer.getOwnHand(1), true));
         panelTable.setPreferredSize(new Dimension(800, 800));
         showGameState();
-        btnFold.addActionListener(e -> {}
-                );
+        btnFold.addActionListener(e -> {
+            humanPlayer.setLastAction(Player.ACTION_FOLD);
+            while (game.getState() != Game.FINISHED) {
+                game.doStep(TxHoldemGame.CONTINUE_BETS);
+            }
+            showGameState();
+        });
         btnRaise.addActionListener(e -> {
-
+            double bet = humanPlayer.makeBet(game.getCurrentBet(), game.getBetStep());
+            game.addToBank(bet);
+            game.addToCurrentBet(game.getBetStep());
+            game.doStep(TxHoldemGame.CONTINUE_BETS);
+            showGameState();
         });
         btnCall.addActionListener(e -> {
-
+            double bet = humanPlayer.makeBet(game.getCurrentBet(), 0);
+            if (bet == 0) {
+                game.doStep(TxHoldemGame.STOP_BETS);
+            } else {
+                game.addToBank(bet);
+                game.doStep(TxHoldemGame.CONTINUE_BETS);
+            }
+            showGameState();
         });
         btnStay.addActionListener(e -> {
-
+            humanPlayer.setLastAction(Player.ACTION_STAY);
+            game.doStep(TxHoldemGame.CONTINUE_BETS);
+            showGameState();
         });
 //        panelTable.setSize(600, 600);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -182,17 +203,25 @@ public class TxHoldemForm extends JFrame {
             bets[i].setText("Bet: " + players[i].getCurrentBet());
             states[i].setText("State: " + players[i].getLastActionName());
         }
-        lblHumanBudget.setText("Your budget: " + players[players.length - 1].getBudget());
-        lblHumanBet.setText("Your bet: " + players[players.length - 1].getCurrentBet());
-        lblHumanState.setText("Your last action: " + players[players.length - 1].getLastActionName());
+        lblHumanBudget.setText("Your budget: " + humanPlayer.getBudget());
+        lblHumanBet.setText("Your bet: " + humanPlayer.getCurrentBet());
+        lblHumanState.setText("Your last action: " + humanPlayer.getLastActionName());
         lblBank.setText("Bank: " + game.getBank());
-        boolean canStay = players[players.length - 1].canStay(game.getCurrentBet());
-        boolean canCall = players[players.length - 1].canRise(game.getCurrentBet(), 0);
-        boolean canRise = players[players.length - 1].canRise(game.getCurrentBet(), game.getBetStep());
-        btnFold.setEnabled(!canStay);
-        btnStay.setEnabled(canStay);
-        btnCall.setEnabled(canCall);
-        btnRaise.setEnabled(canRise);
+        showTable();
+        if (game.getState() == Game.FINISHED) {
+            btnFold.setEnabled(false);
+            btnStay.setEnabled(false);
+            btnCall.setEnabled(false);
+            btnRaise.setEnabled(false);
+        } else {
+            boolean canStay = humanPlayer.canStay(game.getCurrentBet());
+            boolean canCall = !canStay && humanPlayer.canRise(game.getCurrentBet(), 0);
+            boolean canRise = humanPlayer.canRise(game.getCurrentBet(), game.getBetStep());
+            btnFold.setEnabled(!canStay);
+            btnStay.setEnabled(canStay);
+            btnCall.setEnabled(canCall);
+            btnRaise.setEnabled(canRise);
+        }
     }
     private void showTable() {
         for (int i = 0; i < 5; i++) {

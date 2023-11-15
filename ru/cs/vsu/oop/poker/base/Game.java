@@ -1,8 +1,8 @@
 package ru.cs.vsu.oop.poker.base;
 
 public class Game {
-    public final int FINISHED = -1;
-    public final int IN_STREET = -10;
+    public static final int FINISHED = -1;
+    public static final int IN_STREET = -10;
     protected Deck deck;
     protected double bank;
     protected double currentBet;

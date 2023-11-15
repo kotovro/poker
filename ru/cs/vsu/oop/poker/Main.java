@@ -1,6 +1,7 @@
 package ru.cs.vsu.oop.poker;
 
 import ru.cs.vsu.oop.poker.base.Card;
+import ru.cs.vsu.oop.poker.base.Game;
 import ru.cs.vsu.oop.poker.base.Player;
 import ru.cs.vsu.oop.poker.texasholdem.graphics.TxHoldemForm;
 import ru.cs.vsu.oop.poker.texasholdem.logic.TxHoldemGame;
@@ -30,11 +31,11 @@ public class Main {
             int budget = scanner.nextInt();
             TxHoldemGame game = new TxHoldemGame(botsCount, budget);
             int action = -1;
-            while (game.getState() != game.FINISHED) {
+            while (game.getState() != Game.FINISHED) {
                 game.doStep(action);
                 showStepResult(game, true);
                 TxHoldemPlayer humanPlayer = (TxHoldemPlayer) game.getHumanPlayer();
-                if (game.getState() != game.FINISHED && humanPlayer.getLastAction() != Player.ACTION_FOLD) {
+                if (game.getState() != Game.FINISHED && humanPlayer.getLastAction() != Player.ACTION_FOLD) {
                     action = -1;
                     while (action < 0) {
                         action = getHumanAction(humanPlayer, game);
