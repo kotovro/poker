@@ -1,4 +1,4 @@
-package ru.cs.vsu.oop.poker.texasholdem;
+package ru.cs.vsu.oop.poker.texasholdem.logic;
 
 import ru.cs.vsu.oop.poker.base.Card;
 import ru.cs.vsu.oop.poker.base.Game;
@@ -6,7 +6,6 @@ import ru.cs.vsu.oop.poker.base.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Random;
 
 public class TxHoldemGame extends Game {
     private Card[] table = new Card[5];

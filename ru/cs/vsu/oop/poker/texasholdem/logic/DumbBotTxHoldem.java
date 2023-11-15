@@ -1,4 +1,4 @@
-package ru.cs.vsu.oop.poker.texasholdem;
+package ru.cs.vsu.oop.poker.texasholdem.logic;
 
 import java.util.Random;
 

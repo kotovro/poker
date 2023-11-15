@@ -74,5 +74,16 @@ public class Card implements Comparable<Card> {
     public Card(Suits suit, CardNames name) {
         this.suit = suit;
         this.name = name;
+
+    }
+    public String getShortName() {
+        String shortName;
+        if (name.getCardWeight() < 10) {
+            shortName = Integer.toString(name.getCardWeight());
+        } else {
+            shortName = name.toString().substring(0, 1);
+        }
+        shortName += suit.toString().substring(0, 1);
+        return shortName.toLowerCase();
     }
 }

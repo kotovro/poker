@@ -2,28 +2,43 @@ package ru.cs.vsu.oop.poker;
 
 import ru.cs.vsu.oop.poker.base.Card;
 import ru.cs.vsu.oop.poker.base.Player;
-import ru.cs.vsu.oop.poker.texasholdem.TxHoldemGame;
-import ru.cs.vsu.oop.poker.texasholdem.TxHoldemPlayer;
+import ru.cs.vsu.oop.poker.texasholdem.graphics.TxHoldemForm;
+import ru.cs.vsu.oop.poker.texasholdem.logic.TxHoldemGame;
+import ru.cs.vsu.oop.poker.texasholdem.logic.TxHoldemPlayer;
 
+import javax.swing.*;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Введите число ботов:");
-        int botsCount = scanner.nextInt();
-        System.out.println("Введите бюджет:");
-        int budget = scanner.nextInt();
-        TxHoldemGame game = new TxHoldemGame(botsCount, budget);
-        int action = -1;
-        while (game.getState() != game.FINISHED) {
-            game.doStep(action);
-            showStepResult(game, true);
-            TxHoldemPlayer humanPlayer = (TxHoldemPlayer) game.getHumanPlayer();
-            if (game.getState() != game.FINISHED && humanPlayer.getLastAction() != Player.ACTION_FOLD) {
-                action = -1;
-                while (action < 0) {
-                    action = getHumanAction(humanPlayer, game);
+        boolean isGraphics = true;
+        if (isGraphics) {
+            Runnable swingStarter = new Runnable() {
+                @Override
+                public void run() {
+                    new TxHoldemForm();
+                }
+            };
+            SwingUtilities.invokeLater(swingStarter);
+        } else {
+
+
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Введите число ботов:");
+            int botsCount = scanner.nextInt();
+            System.out.println("Введите бюджет:");
+            int budget = scanner.nextInt();
+            TxHoldemGame game = new TxHoldemGame(botsCount, budget);
+            int action = -1;
+            while (game.getState() != game.FINISHED) {
+                game.doStep(action);
+                showStepResult(game, true);
+                TxHoldemPlayer humanPlayer = (TxHoldemPlayer) game.getHumanPlayer();
+                if (game.getState() != game.FINISHED && humanPlayer.getLastAction() != Player.ACTION_FOLD) {
+                    action = -1;
+                    while (action < 0) {
+                        action = getHumanAction(humanPlayer, game);
+                    }
                 }
             }
         }
