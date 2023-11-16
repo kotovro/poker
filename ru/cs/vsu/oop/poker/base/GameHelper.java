@@ -1,5 +1,7 @@
 package ru.cs.vsu.oop.poker.base;
 
+import javax.swing.*;
+
 public class GameHelper {
     public static void sortHand(Card[] hand){
         Card temp;
@@ -172,6 +174,18 @@ public class GameHelper {
         return true;
     }
 
+    public static Icon getIconForCard(Card card, boolean showCard) {
+        String filename = getIconFileName(!showCard ? "b" : card.getShortName());
+        return getIconForName(filename);
+    }
 
+    public static Icon getIconForName(String filename) {
+        return new ImageIcon(filename);
+    };
+    public static String getIconFileName(String name) {
+        String path = "ru\\cs\\vsu\\oop\\poker\\cards\\";
+        String extension = ".gif";
+        return path + name + extension;
+    }
 
 }

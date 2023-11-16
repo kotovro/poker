@@ -10,6 +10,12 @@ import java.util.Arrays;
 public class TxHoldemGame extends Game {
     private Card[] table = new Card[5];
 
+    public TxHoldemPlayer[] getWinners() {
+        return winners;
+    }
+
+    private TxHoldemPlayer[] winners;
+
     private void clearTable() {
         Arrays.fill(table, null);
     }
@@ -81,9 +87,9 @@ public class TxHoldemGame extends Game {
                 doBetRound();
             }
             case FINISHED -> {
-                TxHoldemPlayer[] winners = getGameWinners();
+                winners = getGameWinners();
                 for (Player winner: winners) {
-                    winner.addBudget(bank/winners.length);
+                    winner.addBudget(bank/ winners.length);
                 }
             }
         }

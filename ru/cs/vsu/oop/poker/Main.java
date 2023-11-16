@@ -29,11 +29,17 @@ public class Main {
             int botsCount = scanner.nextInt();
             System.out.println("Введите бюджет:");
             int budget = scanner.nextInt();
+            System.out.println("Включить рентген?");
+            String input = scanner.next();
+            boolean isDebug = false;
+            if (input.toLowerCase() == "y") {
+                isDebug = true;
+            }
             TxHoldemGame game = new TxHoldemGame(botsCount, budget);
             int action = -1;
             while (game.getState() != Game.FINISHED) {
                 game.doStep(action);
-                showStepResult(game, true);
+                showStepResult(game, isDebug);
                 TxHoldemPlayer humanPlayer = (TxHoldemPlayer) game.getHumanPlayer();
                 if (game.getState() != Game.FINISHED && humanPlayer.getLastAction() != Player.ACTION_FOLD) {
                     action = -1;

@@ -93,7 +93,7 @@ public class Player {
         }
     }
     public void clearHand(){
-        this.hand.clear();
+        this.hand = null;
     }
 
 }

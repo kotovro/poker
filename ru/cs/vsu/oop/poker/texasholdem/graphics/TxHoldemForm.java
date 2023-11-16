@@ -9,8 +9,13 @@ import ru.cs.vsu.oop.poker.texasholdem.logic.TxHoldemPlayer;
 import javax.swing.*;
 import java.awt.*;
 
+import static ru.cs.vsu.oop.poker.base.GameHelper.*;
+
 public class TxHoldemForm extends JFrame {
 
+    private boolean isDebug;
+    private int botsCount;
+    private double budget;
     private JPanel panelTable;
     private JPanel panelLeft;
     private JPanel panelRight;
@@ -92,8 +97,11 @@ public class TxHoldemForm extends JFrame {
     private TxHoldemPlayer humanPlayer;
 
     public TxHoldemForm() {
-        boolean isDebug = true;
-        game = new TxHoldemGame(4, 100);
+        this.isDebug = true;
+        this.botsCount = 4;
+        this.budget = 100;
+
+        game = new TxHoldemGame(botsCount, budget);
         TxHoldemPlayer[] players = (TxHoldemPlayer[]) game.getPlayers();
         humanPlayer = players[players.length - 1];
         initLabels();
@@ -128,14 +136,14 @@ public class TxHoldemForm extends JFrame {
             game.doStep(TxHoldemGame.CONTINUE_BETS);
             showGameState();
         });
-
+        this.setTitle("Texas holdem poker game");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setContentPane(panelTable);
-        this.setLocationRelativeTo(null);
         this.setVisible(true);
-        
+
         this.pack();
+        this.setLocationRelativeTo(null);
     }
 
     private void startGame(boolean isDebug, TxHoldemPlayer[] players) {
@@ -186,19 +194,7 @@ public class TxHoldemForm extends JFrame {
         }
     }
 
-    private Icon getIconForCard(Card card, boolean showCard) {
-        String filename = getIconFileName(!showCard ? "b" : card.getShortName());
-        return getIconForName(filename);
-    }
 
-    private Icon getIconForName(String filename) {
-        return new ImageIcon(filename);
-    };
-    private String getIconFileName(String name) {
-        String path = "ru\\cs\\vsu\\oop\\poker\\cards\\";
-        String extension = ".gif";
-        return path + name + extension;
-    }
 
     public void showGameState() {
         TxHoldemPlayer[] players = (TxHoldemPlayer[]) game.getPlayers();
@@ -217,6 +213,7 @@ public class TxHoldemForm extends JFrame {
             btnStay.setEnabled(false);
             btnCall.setEnabled(false);
             btnRaise.setEnabled(false);
+            showContinueGameDialogue();
         } else {
             boolean canStay = humanPlayer.canStay(game.getCurrentBet());
             boolean canCall = !canStay && humanPlayer.canRise(game.getCurrentBet(), 0);
@@ -227,6 +224,26 @@ public class TxHoldemForm extends JFrame {
             btnRaise.setEnabled(canRise);
         }
     }
+
+    private void showContinueGameDialogue() {
+        boolean canContinue = game.getHumanPlayer().getBudget() > 0;
+        int playersLeft = 0;
+        for (Player p: game.getPlayers()) {
+            if (p.getBudget() > 0) {
+                playersLeft++;
+                if (playersLeft == 2) {
+                    break;
+                }
+            }
+        }
+        canContinue = canContinue && playersLeft > 1;
+        JDialog dlg = new ContinueGameDialog(a -> {
+            game.continueGame();
+            startGame(this.isDebug, (TxHoldemPlayer[]) game.getPlayers());
+        }, game.getWinners(), game.getHumanPlayer(),canContinue, this);
+        dlg.setVisible(true);
+    }
+
     private void showTable() {
         for (int i = 0; i < 5; i++) {
             Card card = game.getTable(i);
