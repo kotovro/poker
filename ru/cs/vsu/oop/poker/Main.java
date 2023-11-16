@@ -13,6 +13,9 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         boolean isGraphics = true;
+        if (args[0].equals("--mode=text")){
+            isGraphics = false;
+        }
         if (isGraphics) {
             Runnable swingStarter = new Runnable() {
                 @Override
@@ -25,14 +28,14 @@ public class Main {
 
 
             Scanner scanner = new Scanner(System.in);
-            System.out.println("Введите число ботов:");
+            System.out.println("Enter bots count:");
             int botsCount = scanner.nextInt();
-            System.out.println("Введите бюджет:");
+            System.out.println("Enter game budget:");
             int budget = scanner.nextInt();
-            System.out.println("Включить рентген?");
+            System.out.println("Do you want to enable X-ray?");
             String input = scanner.next();
             boolean isDebug = false;
-            if (input.toLowerCase() == "y") {
+            if (input.equalsIgnoreCase("y")) {
                 isDebug = true;
             }
             TxHoldemGame game = new TxHoldemGame(botsCount, budget);
