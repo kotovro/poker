@@ -9,7 +9,7 @@ import ru.cs.vsu.oop.poker.texasholdem.logic.TxHoldemPlayer;
 import javax.swing.*;
 import java.awt.*;
 
-import static ru.cs.vsu.oop.poker.base.GameHelper.*;
+import static ru.cs.vsu.oop.poker.texasholdem.graphics.IconHelper.*;
 
 public class TxHoldemForm extends JFrame {
 
@@ -110,7 +110,7 @@ public class TxHoldemForm extends JFrame {
         btnFold.addActionListener(e -> {
             humanPlayer.setLastAction(Player.ACTION_FOLD);
             while (game.getState() != Game.FINISHED) {
-                game.doStep(TxHoldemGame.CONTINUE_BETS);
+                game.doStep(Game.CONTINUE_BETS);
             }
             showGameState();
         });
@@ -118,22 +118,22 @@ public class TxHoldemForm extends JFrame {
             double bet = humanPlayer.makeBet(game.getCurrentBet(), game.getBetStep());
             game.addToBank(bet);
             game.addToCurrentBet(game.getBetStep());
-            game.doStep(TxHoldemGame.CONTINUE_BETS);
+            game.doStep(Game.CONTINUE_BETS);
             showGameState();
         });
         btnCall.addActionListener(e -> {
             double bet = humanPlayer.makeBet(game.getCurrentBet(), 0);
             if (bet == 0) {
-                game.doStep(TxHoldemGame.STOP_BETS);
+                game.doStep(Game.STOP_BETS);
             } else {
                 game.addToBank(bet);
-                game.doStep(TxHoldemGame.CONTINUE_BETS);
+                game.doStep(Game.CONTINUE_BETS);
             }
             showGameState();
         });
         btnStay.addActionListener(e -> {
             humanPlayer.setLastAction(Player.ACTION_STAY);
-            game.doStep(TxHoldemGame.CONTINUE_BETS);
+            game.doStep(Game.CONTINUE_BETS);
             showGameState();
         });
         this.setTitle("Texas holdem poker game");
@@ -147,7 +147,7 @@ public class TxHoldemForm extends JFrame {
     }
 
     private void startGame(boolean isDebug, TxHoldemPlayer[] players) {
-        game.doStep(TxHoldemGame.CONTINUE_BETS);
+        game.doStep(Game.CONTINUE_BETS);
         for (int i = 0; i < players.length - 1; i++) {
             names[i].setText("Bot player " + (i + 1));
             cards1[i].setIcon(getIconForCard(players[i].getOwnHand(0), isDebug));

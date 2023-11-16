@@ -44,7 +44,7 @@
               <text value="Label"/>
             </properties>
           </component>
-          <component id="c5c73" class="javax.swing.JLabel" binding="lblWHandCard2">
+          <component id="c5c73" class="javax.swing.JLabel" binding="lblWHandCard3">
             <constraints>
               <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -52,7 +52,7 @@
               <text value="Label"/>
             </properties>
           </component>
-          <component id="f072d" class="javax.swing.JLabel" binding="lblWHandCard3">
+          <component id="f072d" class="javax.swing.JLabel" binding="lblWHandCard5">
             <constraints>
               <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -68,14 +68,6 @@
               <text value="Label"/>
             </properties>
           </component>
-          <component id="80fcb" class="javax.swing.JLabel" binding="lblWHandCard5">
-            <constraints>
-              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="Label"/>
-            </properties>
-          </component>
           <component id="959cd" class="javax.swing.JLabel" binding="lblWinnerHandHeader">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="0" anchor="1" fill="0" indent="0" use-parent-layout="false"/>
@@ -83,6 +75,14 @@
             <properties>
               <font size="16"/>
               <text value="Winner's hand"/>
+            </properties>
+          </component>
+          <component id="80fcb" class="javax.swing.JLabel" binding="lblWHandCard2">
+            <constraints>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Label"/>
             </properties>
           </component>
         </children>
@@ -103,7 +103,7 @@
               <text value="Label"/>
             </properties>
           </component>
-          <component id="a3959" class="javax.swing.JLabel" binding="lblYHandCard2">
+          <component id="a3959" class="javax.swing.JLabel" binding="lblYHandCard5">
             <constraints>
               <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -111,7 +111,7 @@
               <text value="Label"/>
             </properties>
           </component>
-          <component id="fa4f4" class="javax.swing.JLabel" binding="lblYHandCard3">
+          <component id="fa4f4" class="javax.swing.JLabel" binding="lblYHandCard2">
             <constraints>
               <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -119,7 +119,7 @@
               <text value="Label"/>
             </properties>
           </component>
-          <component id="d99f8" class="javax.swing.JLabel" binding="lblYHandCard4">
+          <component id="d99f8" class="javax.swing.JLabel" binding="lblYHandCard3">
             <constraints>
               <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -127,7 +127,7 @@
               <text value="Label"/>
             </properties>
           </component>
-          <component id="ac715" class="javax.swing.JLabel" binding="lblYHandCard5">
+          <component id="ac715" class="javax.swing.JLabel" binding="lblYHandCard4">
             <constraints>
               <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>

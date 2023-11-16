@@ -19,9 +19,6 @@ public class TxHoldemGame extends Game {
     private void clearTable() {
         Arrays.fill(table, null);
     }
-    public static final int CONTINUE_BETS = 1;
-    public static final int STOP_BETS = 0;
-    public static final int FINISH_GAME = -1;
     private static final int PREFLOP = 0;
     private static final int FLOP = 1;
     private static final int TERN = 2;
@@ -127,30 +124,7 @@ public class TxHoldemGame extends Game {
         return winners.toArray(new TxHoldemPlayer[1]);
     }
 
-    private int doBetRound() {
 
-        for (int i = 0; i < players.length - 1; i++) {
-            if (players[i].getLastAction() == Player.ACTION_FOLD) {
-                continue;
-            }
-            if (players[i].isBot()) {
-                double bet = players[i].makeBet(currentBet, betStep);
-                if (bet > 0) {
-                    bank += bet;
-                    if (players[i].getLastAction() == Player.ACTION_RAISE) {
-                        currentBet += betStep;
-                    }
-                } else if (bet == 0 && players[i].getLastAction() != Player.ACTION_STAY) {
-                    stopStreet();
-                    return STOP_BETS;
-                } else if (bet < 0 && this.getActivePlayersCount() < 2) {
-                    stopStreet();
-                    return FINISH_GAME;
-                }
-            }
-        }
-        return CONTINUE_BETS;
-    }
 
     public Card getTable(int i) {
         return table[i];

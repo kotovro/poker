@@ -3,6 +3,9 @@ package ru.cs.vsu.oop.poker.base;
 import ru.cs.vsu.oop.poker.texasholdem.logic.TxHoldemGame;
 
 public class Game {
+    public static final int CONTINUE_BETS = 1;
+    public static final int STOP_BETS = 0;
+    public static final int FINISH_GAME = -1;
     public static final int FINISHED = -1;
     public static final int IN_STREET = -10;
     protected Deck deck;
@@ -10,6 +13,7 @@ public class Game {
     protected double currentBet;
     protected int state;
     protected boolean inStreet;
+
 
     public Player[] getPlayers() {
         return players;
@@ -104,5 +108,29 @@ public class Game {
             }
         }
         this.players = res;
+    }
+    protected int doBetRound() {
+
+        for (int i = 0; i < players.length - 1; i++) {
+            if (players[i].getLastAction() == Player.ACTION_FOLD) {
+                continue;
+            }
+            if (players[i].isBot()) {
+                double bet = players[i].makeBet(currentBet, betStep);
+                if (bet > 0) {
+                    bank += bet;
+                    if (players[i].getLastAction() == Player.ACTION_RAISE) {
+                        currentBet += betStep;
+                    }
+                } else if (bet == 0 && players[i].getLastAction() != Player.ACTION_STAY) {
+                    stopStreet();
+                    return STOP_BETS;
+                } else if (bet < 0 && this.getActivePlayersCount() < 2) {
+                    stopStreet();
+                    return FINISH_GAME;
+                }
+            }
+        }
+        return CONTINUE_BETS;
     }
 }

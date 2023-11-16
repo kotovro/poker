@@ -5,10 +5,9 @@ import ru.cs.vsu.oop.poker.base.Player;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
 import java.awt.event.ActionListener;
 
-import static ru.cs.vsu.oop.poker.base.GameHelper.getIconForCard;
+import static ru.cs.vsu.oop.poker.texasholdem.graphics.IconHelper.getIconForCard;
 
 public class ContinueGameDialog extends JDialog {
     private JPanel panel1;
@@ -78,9 +77,9 @@ public class ContinueGameDialog extends JDialog {
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setResizable(false);
         this.setContentPane(panel1);
-        this.setLocationRelativeTo(parent);
 
         this.pack();
+        this.setLocationRelativeTo(parent);
     }
 
     private void showHand(JLabel[] cards, Hand hand) {

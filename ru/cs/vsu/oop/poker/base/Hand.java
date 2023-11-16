@@ -7,12 +7,11 @@ public class Hand implements Comparable<Hand> {
     private Card[] hand = new Card[5];
     private Combinations combo;
 
-
-    public Hand(Card[] hand) {
+    public Hand(Card[] hand, IComboFinder helper) {
         for (int i = 0; i < 5; i++) {
             this.hand[i] = hand[i];
         }
-        this.combo= GameHelper.findBestCombo(hand);
+        this.combo = helper.findBestCombo(this.hand);
     }
 
     public Card[] getHand() {
