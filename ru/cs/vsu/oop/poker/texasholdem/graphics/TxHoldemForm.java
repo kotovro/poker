@@ -101,7 +101,7 @@ public class TxHoldemForm extends JFrame {
 
     public TxHoldemForm() {
 
-        initLabels();
+        initControls();
 //        newGame();
 
 
@@ -167,7 +167,7 @@ public class TxHoldemForm extends JFrame {
         showGameState();
     }
 
-    private void initLabels() {
+    private void initControls() {
 
         for (int i = 0; i < 6; i++) {
             names[i].setText(" ");
@@ -197,6 +197,10 @@ public class TxHoldemForm extends JFrame {
         lblHumanBet.setForeground(Color.white);
         lblHumanState.setFont(humanFont);
         lblHumanState.setForeground(Color.white);
+        btnFold.setEnabled(false);
+        btnCall.setEnabled(false);
+        btnStay.setEnabled(false);
+        btnRaise.setEnabled(false);
     }
     private void drawEmptyCards(JLabel[] labels) {
         for (JLabel lbl: labels) {
