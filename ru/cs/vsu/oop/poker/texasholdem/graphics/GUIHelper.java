@@ -8,7 +8,10 @@ import java.awt.*;
 
 public class GUIHelper {
     public static Icon getIconForCard(Card card, boolean showCard) {
-        String filename = getIconFileName(!showCard ? "b" : card.getShortName());
+        String filename = getIconFileName("empty");
+        if (card != null) {
+            filename = getIconFileName(!showCard ? "b" : card.getShortName());
+        }
         return getIconForName(filename);
     }
 

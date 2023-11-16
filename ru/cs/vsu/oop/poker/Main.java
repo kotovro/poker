@@ -13,7 +13,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         boolean isGraphics = true;
-        if (args[0].equals("--mode=text")){
+        if (args.length > 0 && args[0].equals("--mode=text")){
             isGraphics = false;
         }
         if (isGraphics) {
@@ -25,8 +25,6 @@ public class Main {
             };
             SwingUtilities.invokeLater(swingStarter);
         } else {
-
-
             Scanner scanner = new Scanner(System.in);
             System.out.println("Enter bots count:");
             int botsCount = scanner.nextInt();

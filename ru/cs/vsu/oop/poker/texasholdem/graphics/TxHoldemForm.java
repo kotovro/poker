@@ -92,6 +92,7 @@ public class TxHoldemForm extends JFrame {
     private JLabel[] cards2 = {lblPlayer1card2, lblPlayer2card2, lblPlayer3card2, lblPlayer4card2, lblPlayer5card2, lblPlayer6card2};
     private JPanel[] botPanels = {panelBot1, panelBot2, panelBot3, panelBot4, panelBot5, panelBot6};
     private JLabel[] tableCards = {lblTableCard1, lblTableCard2, lblTableCard3, lblTableCard4, lblTableCard5};
+    private JLabel[] humanCards = {lblHumanCard1, lblHumanCard2};
     private TxHoldemPlayer humanPlayer;
     private GameParams params = new GameParams();
     private ParamsDialog dialogParams = new ParamsDialog(this.panelTable, params, e -> {
@@ -101,7 +102,8 @@ public class TxHoldemForm extends JFrame {
     public TxHoldemForm() {
 
         initLabels();
-        newGame();
+//        newGame();
+
 
 
 
@@ -143,6 +145,8 @@ public class TxHoldemForm extends JFrame {
 
         this.pack();
         this.setLocationRelativeTo(null);
+        dialogParams.updateView();
+        dialogParams.setVisible(true);
     }
 
     private void startGame() {
@@ -164,15 +168,21 @@ public class TxHoldemForm extends JFrame {
     }
 
     private void initLabels() {
+
         for (int i = 0; i < 6; i++) {
+            names[i].setText(" ");
             names[i].setForeground(Color.white);
+            bets[i].setText(" ");
             bets[i].setForeground(Color.white);
+            budgets[i].setText(" ");
             budgets[i].setForeground(Color.white);
+            states[i].setText(" ");
             states[i].setForeground(Color.white);
         }
-        for (JLabel label : tableCards) {
-            label.setText("");
-        }
+        drawEmptyCards(tableCards);
+        drawEmptyCards(cards1);
+        drawEmptyCards(cards2);
+        drawEmptyCards(humanCards);
         Font bankFont = new Font(lblBank.getFont().getName(), Font.PLAIN, 20);
         lblBank.setFont(bankFont);
         lblBank.setForeground(Color.white);
@@ -188,7 +198,12 @@ public class TxHoldemForm extends JFrame {
         lblHumanState.setFont(humanFont);
         lblHumanState.setForeground(Color.white);
     }
-
+    private void drawEmptyCards(JLabel[] labels) {
+        for (JLabel lbl: labels) {
+            lbl.setText("");
+            lbl.setIcon(getIconForCard(null, false));
+        }
+    }
     private void hideUnusedBots(int players) {
         for (int i = players - 1; i < 6; i++) {
             botPanels[i].setVisible(false);
