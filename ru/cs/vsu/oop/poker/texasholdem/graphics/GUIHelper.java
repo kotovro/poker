@@ -1,10 +1,12 @@
 package ru.cs.vsu.oop.poker.texasholdem.graphics;
 
 import ru.cs.vsu.oop.poker.base.Card;
+import ru.cs.vsu.oop.poker.base.Player;
 
 import javax.swing.*;
+import java.awt.*;
 
-public class IconHelper {
+public class GUIHelper {
     public static Icon getIconForCard(Card card, boolean showCard) {
         String filename = getIconFileName(!showCard ? "b" : card.getShortName());
         return getIconForName(filename);
@@ -17,5 +19,12 @@ public class IconHelper {
         String path = "ru\\cs\\vsu\\oop\\poker\\cards\\";
         String extension = ".gif";
         return path + name + extension;
+    }
+    public static Color getStatusColor(int status) {
+        switch (status) {
+            case Player.ACTION_FOLD -> { return Color.WHITE; }
+            case Player.ACTION_RAISE -> { return Color.RED; }
+            default -> { return Color.YELLOW; }
+        }
     }
 }

@@ -7,7 +7,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionListener;
 
-import static ru.cs.vsu.oop.poker.texasholdem.graphics.IconHelper.getIconForCard;
+import static ru.cs.vsu.oop.poker.texasholdem.graphics.GUIHelper.getIconForCard;
 
 public class ContinueGameDialog extends JDialog {
     private JPanel panel1;

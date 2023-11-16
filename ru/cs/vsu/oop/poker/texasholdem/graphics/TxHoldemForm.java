@@ -10,7 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-import static ru.cs.vsu.oop.poker.texasholdem.graphics.IconHelper.*;
+import static ru.cs.vsu.oop.poker.texasholdem.graphics.GUIHelper.*;
 
 public class TxHoldemForm extends JFrame {
 
@@ -201,10 +201,12 @@ public class TxHoldemForm extends JFrame {
         for (int i = 0; i < players.length - 1; i++) {
             budgets[i].setText("Budget: " + players[i].getBudget());
             bets[i].setText("Bet: " + players[i].getCurrentBet());
+            states[i].setForeground(getStatusColor(players[i].getLastAction()));
             states[i].setText("State: " + players[i].getLastActionName());
         }
         lblHumanBudget.setText("Your budget: " + humanPlayer.getBudget());
         lblHumanBet.setText("Your bet: " + humanPlayer.getCurrentBet());
+        lblHumanState.setForeground(getStatusColor(humanPlayer.getLastAction()));
         lblHumanState.setText("Your last action: " + humanPlayer.getLastActionName());
         lblBank.setText("Bank: " + game.getBank());
         showTable();
@@ -293,7 +295,7 @@ public class TxHoldemForm extends JFrame {
         startGame();
     }
     public class GameParams {
-        boolean isXRayEnabled = true;
+        boolean isXRayEnabled = false;
         double budget = 100;
         int botCount = 4;
 
