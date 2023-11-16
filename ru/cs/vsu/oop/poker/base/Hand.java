@@ -1,5 +1,7 @@
 package ru.cs.vsu.oop.poker.base;
 
+import java.util.Arrays;
+
 public class Hand implements Comparable<Hand> {
 
     private Card[] hand = new Card[5];
@@ -33,5 +35,8 @@ public class Hand implements Comparable<Hand> {
             }
         }
         return result;
+    }
+    public void clear() {
+        Arrays.fill(this.hand, null);
     }
 }

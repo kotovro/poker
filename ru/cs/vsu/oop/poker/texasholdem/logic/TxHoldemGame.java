@@ -149,4 +149,15 @@ public class TxHoldemGame extends Game {
     public Card getTable(int i) {
         return table[i];
     }
+
+    @Override
+    public void continueGame() {
+        super.continueGame();
+        for (TxHoldemPlayer player: (TxHoldemPlayer[]) players) {
+            player.clearOwnHand();
+        }
+        clearTable();
+        this.state = PREFLOP;
+        this.inStreet = false;
+    }
 }

@@ -36,4 +36,5 @@ public class DumbBotTxHoldem extends TxHoldemPlayer {
         }
         return super.makeBet(currentGameBet, (acton == ACTION_RAISE) ? wantedBet : 0);
     }
+
 }

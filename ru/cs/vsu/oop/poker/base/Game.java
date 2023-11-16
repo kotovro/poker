@@ -1,5 +1,7 @@
 package ru.cs.vsu.oop.poker.base;
 
+import ru.cs.vsu.oop.poker.texasholdem.logic.TxHoldemGame;
+
 public class Game {
     public static final int FINISHED = -1;
     public static final int IN_STREET = -10;
@@ -76,5 +78,31 @@ public class Game {
 
     public void addToBank(double bet) {
         this.bank += bet;
+    }
+    public void continueGame() {
+        this.bank = 0;
+        this.deck = new Deck();
+        Player[] currentPlayers = players;
+        for (Player player: currentPlayers) {
+            if (player.getBudget() == 0) {
+                removePoorPlayer(player);
+            } else {
+                player.setLastAction(Player.ACTION_NONE);
+                player.clearCurrentBet();
+                player.clearHand();
+            }
+        }
+    }
+
+    private void removePoorPlayer(Player player) {
+        Player[] res = new Player[players.length - 1];
+        int idx = 0;
+        for (Player curPlayer: players) {
+            if (curPlayer != player) {
+                res[idx] = curPlayer;
+                idx++;
+            }
+        }
+        this.players = res;
     }
 }

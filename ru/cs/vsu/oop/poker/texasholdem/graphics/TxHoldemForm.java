@@ -8,7 +8,6 @@ import ru.cs.vsu.oop.poker.texasholdem.logic.TxHoldemPlayer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 
 public class TxHoldemForm extends JFrame {
 
@@ -98,18 +97,8 @@ public class TxHoldemForm extends JFrame {
         TxHoldemPlayer[] players = (TxHoldemPlayer[]) game.getPlayers();
         humanPlayer = players[players.length - 1];
         initLabels();
-        game.doStep(Player.ACTION_NONE);
-        for (int i = 0; i < players.length - 1; i++) {
-            names[i].setText("Bot player " + (i + 1));
-            cards1[i].setIcon(getIconForCard(players[i].getOwnHand(0), isDebug));
-            cards1[i].setText("");
-            cards2[i].setIcon(getIconForCard(players[i].getOwnHand(1), isDebug));
-            cards2[i].setText("");
-        }
-        lblHumanCard1.setIcon(getIconForCard(humanPlayer.getOwnHand(0), true));
-        lblHumanCard2.setIcon(getIconForCard(humanPlayer.getOwnHand(1), true));
-        panelTable.setPreferredSize(new Dimension(800, 800));
-        showGameState();
+        startGame(isDebug, players);
+
         btnFold.addActionListener(e -> {
             humanPlayer.setLastAction(Player.ACTION_FOLD);
             while (game.getState() != Game.FINISHED) {
@@ -139,16 +128,32 @@ public class TxHoldemForm extends JFrame {
             game.doStep(TxHoldemGame.CONTINUE_BETS);
             showGameState();
         });
-//        panelTable.setSize(600, 600);
+
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setContentPane(panelTable);
-        this.pack();
         this.setLocationRelativeTo(null);
-        //this.paint();
-        setVisible(true);
-        hideUnusedBots(players.length);
+        this.setVisible(true);
+        
+        this.pack();
     }
+
+    private void startGame(boolean isDebug, TxHoldemPlayer[] players) {
+        game.doStep(TxHoldemGame.CONTINUE_BETS);
+        for (int i = 0; i < players.length - 1; i++) {
+            names[i].setText("Bot player " + (i + 1));
+            cards1[i].setIcon(getIconForCard(players[i].getOwnHand(0), isDebug));
+            cards1[i].setText("");
+            cards2[i].setIcon(getIconForCard(players[i].getOwnHand(1), isDebug));
+            cards2[i].setText("");
+        }
+        hideUnusedBots(players.length);
+        lblHumanCard1.setIcon(getIconForCard(humanPlayer.getOwnHand(0), true));
+        lblHumanCard2.setIcon(getIconForCard(humanPlayer.getOwnHand(1), true));
+        panelTable.setPreferredSize(new Dimension(800, 800));
+        showGameState();
+    }
+
     private void initLabels() {
         for (int i = 0; i < 6; i++) {
             names[i].setForeground(Color.white);
@@ -158,7 +163,6 @@ public class TxHoldemForm extends JFrame {
         }
         for (JLabel label: tableCards) {
             label.setText("");
-            label.setIcon(getIconForName(getIconFileName("empty")));
         }
         Font bankFont = new Font(lblBank.getFont().getName(), Font.PLAIN, 20);
         lblBank.setFont(bankFont);
@@ -228,6 +232,8 @@ public class TxHoldemForm extends JFrame {
             Card card = game.getTable(i);
             if (card != null) {
                 tableCards[i].setIcon(getIconForCard(card, true));
+            } else {
+                tableCards[i].setIcon(getIconForName(getIconFileName("empty")));
             }
         }
     }

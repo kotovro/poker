@@ -1,6 +1,7 @@
 package ru.cs.vsu.oop.poker.base;
 
 import java.io.File;
+import java.util.Arrays;
 
 public class Player {
     public final static int ACTION_NONE = 0;
@@ -91,4 +92,8 @@ public class Player {
             }
         }
     }
+    public void clearHand(){
+        this.hand.clear();
+    }
+
 }

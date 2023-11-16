@@ -4,6 +4,8 @@ import ru.cs.vsu.oop.poker.base.Card;
 import ru.cs.vsu.oop.poker.base.Hand;
 import ru.cs.vsu.oop.poker.base.Player;
 
+import java.util.Arrays;
+
 public class TxHoldemPlayer extends Player {
     protected Card[] ownHand = new Card[2];
 
@@ -58,5 +60,9 @@ public class TxHoldemPlayer extends Player {
 
     public Card getOwnHand(int i) {
         return ownHand[i];
+    }
+
+    public void clearOwnHand() {
+        Arrays.fill(ownHand, null);
     }
 }
