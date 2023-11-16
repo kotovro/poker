@@ -8,14 +8,12 @@ import ru.cs.vsu.oop.poker.texasholdem.logic.TxHoldemPlayer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 import static ru.cs.vsu.oop.poker.texasholdem.graphics.IconHelper.*;
 
 public class TxHoldemForm extends JFrame {
 
-    private boolean isDebug;
-    private int botsCount;
-    private double budget;
     private JPanel panelTable;
     private JPanel panelLeft;
     private JPanel panelRight;
@@ -95,17 +93,17 @@ public class TxHoldemForm extends JFrame {
     private JPanel[] botPanels = {panelBot1, panelBot2, panelBot3, panelBot4, panelBot5, panelBot6};
     private JLabel[] tableCards = {lblTableCard1, lblTableCard2, lblTableCard3, lblTableCard4, lblTableCard5};
     private TxHoldemPlayer humanPlayer;
+    private GameParams params = new GameParams();
+    private ParamsDialog dialogParams = new ParamsDialog(this.panelTable, params, e -> {
+        newGame();
+    });
 
     public TxHoldemForm() {
-        this.isDebug = true;
-        this.botsCount = 4;
-        this.budget = 100;
 
-        game = new TxHoldemGame(botsCount, budget);
-        TxHoldemPlayer[] players = (TxHoldemPlayer[]) game.getPlayers();
-        humanPlayer = players[players.length - 1];
         initLabels();
-        startGame(isDebug, players);
+        newGame();
+
+
 
         btnFold.addActionListener(e -> {
             humanPlayer.setLastAction(Player.ACTION_FOLD);
@@ -140,19 +138,22 @@ public class TxHoldemForm extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setContentPane(panelTable);
+        this.setJMenuBar(createMenuBar());
         this.setVisible(true);
 
         this.pack();
         this.setLocationRelativeTo(null);
     }
 
-    private void startGame(boolean isDebug, TxHoldemPlayer[] players) {
+    private void startGame() {
+        TxHoldemPlayer[] players = (TxHoldemPlayer[]) game.getPlayers();
         game.doStep(Game.CONTINUE_BETS);
         for (int i = 0; i < players.length - 1; i++) {
+            botPanels[i].setVisible(true);
             names[i].setText("Bot player " + (i + 1));
-            cards1[i].setIcon(getIconForCard(players[i].getOwnHand(0), isDebug));
+            cards1[i].setIcon(getIconForCard(players[i].getOwnHand(0), params.isXRayEnabled()));
             cards1[i].setText("");
-            cards2[i].setIcon(getIconForCard(players[i].getOwnHand(1), isDebug));
+            cards2[i].setIcon(getIconForCard(players[i].getOwnHand(1), params.isXRayEnabled()));
             cards2[i].setText("");
         }
         hideUnusedBots(players.length);
@@ -169,7 +170,7 @@ public class TxHoldemForm extends JFrame {
             budgets[i].setForeground(Color.white);
             states[i].setForeground(Color.white);
         }
-        for (JLabel label: tableCards) {
+        for (JLabel label : tableCards) {
             label.setText("");
         }
         Font bankFont = new Font(lblBank.getFont().getName(), Font.PLAIN, 20);
@@ -193,7 +194,6 @@ public class TxHoldemForm extends JFrame {
             botPanels[i].setVisible(false);
         }
     }
-
 
 
     public void showGameState() {
@@ -228,7 +228,7 @@ public class TxHoldemForm extends JFrame {
     private void showContinueGameDialogue() {
         boolean canContinue = game.getHumanPlayer().getBudget() > 0;
         int playersLeft = 0;
-        for (Player p: game.getPlayers()) {
+        for (Player p : game.getPlayers()) {
             if (p.getBudget() > 0) {
                 playersLeft++;
                 if (playersLeft == 2) {
@@ -239,8 +239,8 @@ public class TxHoldemForm extends JFrame {
         canContinue = canContinue && playersLeft > 1;
         JDialog dlg = new ContinueGameDialog(a -> {
             game.continueGame();
-            startGame(this.isDebug, (TxHoldemPlayer[]) game.getPlayers());
-        }, game.getWinners(), game.getHumanPlayer(),canContinue, this);
+            startGame();
+        }, game.getWinners(), game.getHumanPlayer(), canContinue, this);
         dlg.setVisible(true);
     }
 
@@ -255,4 +255,70 @@ public class TxHoldemForm extends JFrame {
         }
     }
 
+    private JMenuItem createMenuItem(String text, String shortcut, Character mnemonic, ActionListener listener) {
+        JMenuItem menuItem = new JMenuItem(text);
+        menuItem.addActionListener(listener);
+        if (shortcut != null) {
+            menuItem.setAccelerator(KeyStroke.getKeyStroke(shortcut.replace('+', ' ')));
+        }
+        if (mnemonic != null) {
+            menuItem.setMnemonic(mnemonic);
+        }
+        return menuItem;
+    }
+
+    private JMenuBar createMenuBar() {
+        JMenuBar menuBarMain = new JMenuBar();
+
+        JMenu menuGame = new JMenu("Игра");
+        menuBarMain.add(menuGame);
+        menuGame.add(createMenuItem("Новая", "ctrl+N", null, e -> {
+            newGame();
+        }));
+        menuGame.add(createMenuItem("Параметры", "ctrl+P", null, e -> {
+            dialogParams.updateView();
+            dialogParams.setVisible(true);
+        }));
+        menuGame.addSeparator();
+        menuGame.add(createMenuItem("Выход", "ctrl+X", null, e -> {
+            System.exit(0);
+        }));
+        return menuBarMain;
+
+    }
+
+    private void newGame() {
+        game = new TxHoldemGame(params.getBotCount(), params.getBudget());
+        humanPlayer = (TxHoldemPlayer) game.getHumanPlayer();
+        startGame();
+    }
+    public class GameParams {
+        boolean isXRayEnabled = true;
+        double budget = 100;
+        int botCount = 4;
+
+        public boolean isXRayEnabled() {
+            return isXRayEnabled;
+        }
+
+        public void setXRayEnabled(boolean XRayEnabled) {
+            isXRayEnabled = XRayEnabled;
+        }
+
+        public double getBudget() {
+            return budget;
+        }
+
+        public void setBudget(double budget) {
+            this.budget = budget;
+        }
+
+        public int getBotCount() {
+            return botCount;
+        }
+
+        public void setBotCount(int botCount) {
+            this.botCount = botCount;
+        }
+    }
 }

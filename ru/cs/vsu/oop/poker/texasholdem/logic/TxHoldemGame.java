@@ -33,12 +33,6 @@ public class TxHoldemGame extends Game {
         this.inStreet = false;
         this.betStep = budget / 100;
     }
-
-    @Override
-    public void playGame() {
-
-    }
-
     public void doStep(int humanAction) {
         if (inStreet) {
             if (humanAction == STOP_BETS) {

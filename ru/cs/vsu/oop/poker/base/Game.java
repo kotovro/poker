@@ -1,7 +1,5 @@
 package ru.cs.vsu.oop.poker.base;
 
-import ru.cs.vsu.oop.poker.texasholdem.logic.TxHoldemGame;
-
 public class Game {
     public static final int CONTINUE_BETS = 1;
     public static final int STOP_BETS = 0;
@@ -26,9 +24,6 @@ public class Game {
         this.bank = 0;
         this.deck = new Deck();
     }
-    public void playGame() {
-    }
-
     public int getState() {
         if (!inStreet) {
             return state;
