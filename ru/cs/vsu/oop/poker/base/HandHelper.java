@@ -3,7 +3,7 @@ package ru.cs.vsu.oop.poker.base;
 import javax.swing.*;
 
 public class HandHelper implements IComboFinder{
-    public void sortHand(Card[] hand){
+    public static void sortHand(Card[] hand){
         Card temp;
         for (int i = 0; i <  hand.length - 1; i++) {
             for (int j = i + 1; j < hand.length; j++) {
@@ -49,7 +49,7 @@ public class HandHelper implements IComboFinder{
         }
         return Combinations.NONE;
     }
-    private void swap(Card[] hand, int index1, int index2) {
+    private static void swap(Card[] hand, int index1, int index2) {
         Card temp = hand[index1];
         hand[index1] = hand[index2];
         hand[index2] = temp;
@@ -58,7 +58,7 @@ public class HandHelper implements IComboFinder{
     //so all isXXX() methods assuming that hand can not contain
     //combinations with higher priority
 
-    private boolean isTwoPair(Card[] hand) {
+    private static boolean isTwoPair(Card[] hand) {
         if (hand[0].getName().equals(hand[1].getName())) {
             if(hand[2].getName().equals(hand[3].getName())) {
                 return true;
@@ -76,7 +76,7 @@ public class HandHelper implements IComboFinder{
         return false;
     }
 
-    private boolean isPair(Card[] hand) {
+    private static boolean isPair(Card[] hand) {
         for (int i = 0; i < hand.length - 1; i++) {
             if (hand[i].getName().equals(hand[i+1].getName())) {
                 if (i != 0) {
@@ -95,7 +95,7 @@ public class HandHelper implements IComboFinder{
         return false;
     }
 
-    private boolean isThreeOfAKind(Card[] hand) {
+    private static boolean isThreeOfAKind(Card[] hand) {
         if (hand[0].getName().equals(hand[1].getName())) {
             if (hand[1].getName().equals(hand[2].getName())) {
                 return true;
@@ -117,7 +117,7 @@ public class HandHelper implements IComboFinder{
         return false;
     }
 
-    private boolean isFullHouse(Card[] hand) {
+    private static boolean isFullHouse(Card[] hand) {
         if (hand[0].getName().equals(hand[1].getName())
                 && hand[3].getName().equals(hand[4].getName())) {
             if (hand[2].getName().equals(hand[0].getName())) {
@@ -132,7 +132,7 @@ public class HandHelper implements IComboFinder{
         return false;
     }
 
-    private boolean isFourOfAKind(Card[] hand) {
+    private static boolean isFourOfAKind(Card[] hand) {
         Card.CardNames curName = hand[1].getName();
         int startIndex = hand[0].getName().equals(curName) ? 0 : 1;
         for (int i = startIndex; i < hand.length - 2 + startIndex; i++) {
@@ -146,7 +146,7 @@ public class HandHelper implements IComboFinder{
         return true;
     }
 
-    private boolean isStraight(Card[] hand) {
+    private static boolean isStraight(Card[] hand) {
         if (hand[0].getName().equals(Card.CardNames.ACE) && hand[1].getName().equals(Card.CardNames.FIVE)) {
             for (int i = 1; i < hand.length - 1; i++) {
                 if (hand[i].getName().getCardWeight() != hand[i + 1].getName().getCardWeight() + 1) {
@@ -164,7 +164,7 @@ public class HandHelper implements IComboFinder{
         return true;
     }
 
-    public boolean isFlush(Card[] hand) {
+    public static boolean isFlush(Card[] hand) {
         for (int i = 0; i < hand.length - 1; i++) {
             if (!hand[i].getSuit().equals(hand[i+1].getSuit())) {
                 return false;

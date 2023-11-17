@@ -9,14 +9,6 @@ import java.util.Arrays;
 
 public class TxHoldemPlayer extends Player {
     protected Card[] ownHand = new Card[2];
-
-    public TxHoldemPlayer() {
-    }
-
-    public TxHoldemPlayer(double budget) {
-        super(budget, false);
-    }
-
     public TxHoldemPlayer(double budget, boolean isBot) { super(budget, isBot); }
 
 

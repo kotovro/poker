@@ -4,17 +4,12 @@ import ru.cs.vsu.oop.poker.base.Card;
 import ru.cs.vsu.oop.poker.base.Game;
 import ru.cs.vsu.oop.poker.base.Player;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class TxHoldemGame extends Game {
     private Card[] table = new Card[5];
 
-    public TxHoldemPlayer[] getWinners() {
-        return winners;
-    }
 
-    private TxHoldemPlayer[] winners;
 
     private void clearTable() {
         Arrays.fill(table, null);
@@ -25,7 +20,7 @@ public class TxHoldemGame extends Game {
     private static final int REAVER = 3;
     public TxHoldemGame(int numberOfBots, double budget) {
         players = new TxHoldemPlayer[numberOfBots + 1];
-        players[numberOfBots] = new TxHoldemPlayer(budget);
+        players[numberOfBots] = new TxHoldemPlayer(budget, false);
         for (int i = 0; i < numberOfBots; i++) {
             players[i] = new DumbBotTxHoldem(budget);
         }
@@ -78,48 +73,24 @@ public class TxHoldemGame extends Game {
                 doBetRound();
             }
             case FINISHED -> {
-                winners = getGameWinners();
+                winners = getGameWinners(true);
                 for (Player winner: winners) {
                     winner.addBudget(bank/ winners.length);
                 }
             }
         }
     }
-
-    private TxHoldemPlayer[] getGameWinners() {
-        if (getActivePlayersCount() == 1) {
-            for (TxHoldemPlayer player: (TxHoldemPlayer[]) players) {
-                if (player.getLastAction() != Player.ACTION_FOLD) {
-                    return new TxHoldemPlayer[] {player};
-                }
-            }
+    @Override
+    protected Player[] getGameWinners(boolean tryGetSingleWinner) {
+        Player[] res = getExclusiveWinner();
+        if (res != null) {
+            return res;
         }
         for (TxHoldemPlayer player: (TxHoldemPlayer[]) players) {
             player.findBestHand(table);
         }
-        ArrayList<TxHoldemPlayer> winners = new ArrayList<>();
-        TxHoldemPlayer winner = null;
-        for (TxHoldemPlayer player: (TxHoldemPlayer[]) players) {
-            if (player.getLastAction() != Player.ACTION_FOLD) {
-                if (winner == null) {
-                    winner = player;
-                    winners.add(winner);
-                } else {
-                    if (player.getHand().compareTo(winner.getHand()) == 0) {
-                        winners.add(player);
-                    } else if (player.getHand().compareTo(winner.getHand()) > 0) {
-                        winner = player;
-                        winners = new ArrayList<>();
-                        winners.add(winner);
-                    }
-                }
-            }
-        }
-        return winners.toArray(new TxHoldemPlayer[1]);
+        return super.getGameWinners(false);
     }
-
-
-
     public Card getTable(int i) {
         return table[i];
     }

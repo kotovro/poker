@@ -1,5 +1,9 @@
 package ru.cs.vsu.oop.poker.base;
 
+import ru.cs.vsu.oop.poker.texasholdem.logic.TxHoldemPlayer;
+
+import java.util.ArrayList;
+
 public class Game {
     public static final int CONTINUE_BETS = 1;
     public static final int STOP_BETS = 0;
@@ -11,6 +15,7 @@ public class Game {
     protected double currentBet;
     protected int state;
     protected boolean inStreet;
+    protected Player[] winners;
 
 
     public Player[] getPlayers() {
@@ -34,6 +39,9 @@ public class Game {
 
     public double getBank() {
         return this.bank;
+    }
+    public Player[] getWinners() {
+        return winners;
     }
 
     public double getCurrentBet() {
@@ -128,4 +136,39 @@ public class Game {
         }
         return CONTINUE_BETS;
     }
+    protected Player[] getGameWinners(boolean tryGetSingleWinner) {
+        Player[] player = getExclusiveWinner();
+        if (player != null) return player;
+        ArrayList<Player> winners = new ArrayList<>();
+        Player winner = null;
+        for (Player p: players) {
+            if (p.getLastAction() != Player.ACTION_FOLD) {
+                if (winner == null) {
+                    winner = p;
+                    winners.add(winner);
+                } else {
+                    if (p.getHand().compareTo(winner.getHand()) == 0) {
+                        winners.add(p);
+                    } else if (p.getHand().compareTo(winner.getHand()) > 0) {
+                        winner = p;
+                        winners = new ArrayList<>();
+                        winners.add(winner);
+                    }
+                }
+            }
+        }
+        return winners.toArray(new Player[1]);
+    }
+
+    protected Player[] getExclusiveWinner() {
+        if (getActivePlayersCount() == 1) {
+            for (Player player: players) {
+                if (player.getLastAction() != Player.ACTION_FOLD) {
+                    return new Player[]{player};
+                }
+            }
+        }
+        return null;
+    }
+
 }
