@@ -31,6 +31,7 @@ public class HandHelper implements IComboFinder{
         }
         if (isStraight) {
             return Combinations.STRAIGHT;
+            //gjevfnm rfr htfkbpdпосмотреть, как реализовать
         }
         if (isFourOfAKind(hand)) {
             return Combinations.FOUR_OF_A_KIND;

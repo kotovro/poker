@@ -88,8 +88,8 @@ public class TxHoldemForm extends JFrame {
     private JLabel[] budgets = {lblPlayer1Budget, lblPlayer2Budget, lblPlayer3Budget, lblPlayer4Budget, lblPlayer5Budget, lblPlayer6Budget};
     private JLabel[] bets = {lblPlayer1Bet, lblPlayer2Bet, lblPlayer3Bet, lblPlayer4Bet, lblPlayer5Bet, lblPlayer6Bet};
     private JLabel[] states = {lblPlayer1State, lblPlayer2State, lblPlayer3State, lblPlayer4State, lblPlayer5State, lblPlayer6State};
-    private JLabel[] cards1 = {lblPlayer1card1, lblPlayer2card1, lblPlayer3card1, lblPlayer4card1, lblPlayer5card1, lblPlayer6card1};
-    private JLabel[] cards2 = {lblPlayer1card2, lblPlayer2card2, lblPlayer3card2, lblPlayer4card2, lblPlayer5card2, lblPlayer6card2};
+    private JLabel[] cards1 = {lblPlayer1card1, lblPlayer2card1, lblPlayer3card1, lblPlayer4card1, lblPlayer5card1, lblPlayer6card1, lblHumanCard1};
+    private JLabel[] cards2 = {lblPlayer1card2, lblPlayer2card2, lblPlayer3card2, lblPlayer4card2, lblPlayer5card2, lblPlayer6card2, lblHumanCard2};
     private JPanel[] botPanels = {panelBot1, panelBot2, panelBot3, panelBot4, panelBot5, panelBot6};
     private JLabel[] tableCards = {lblTableCard1, lblTableCard2, lblTableCard3, lblTableCard4, lblTableCard5};
     private JLabel[] humanCards = {lblHumanCard1, lblHumanCard2};
@@ -102,10 +102,6 @@ public class TxHoldemForm extends JFrame {
     public TxHoldemForm() {
 
         initControls();
-//        newGame();
-
-
-
 
         btnFold.addActionListener(e -> {
             humanPlayer.setLastAction(Player.ACTION_FOLD);
@@ -136,7 +132,7 @@ public class TxHoldemForm extends JFrame {
             game.doStep(Game.CONTINUE_BETS);
             showGameState();
         });
-        this.setTitle("Texas holdem poker game");
+        this.setTitle("Texas hold'em poker game");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setContentPane(panelTable);
@@ -156,9 +152,7 @@ public class TxHoldemForm extends JFrame {
             botPanels[i].setVisible(true);
             names[i].setText("Bot player " + (i + 1));
             cards1[i].setIcon(getIconForCard(players[i].getOwnHand(0), params.isXRayEnabled()));
-            cards1[i].setText("");
             cards2[i].setIcon(getIconForCard(players[i].getOwnHand(1), params.isXRayEnabled()));
-            cards2[i].setText("");
         }
         hideUnusedBots(players.length);
         lblHumanCard1.setIcon(getIconForCard(humanPlayer.getOwnHand(0), true));
@@ -218,11 +212,13 @@ public class TxHoldemForm extends JFrame {
     public void showGameState() {
         TxHoldemPlayer[] players = (TxHoldemPlayer[]) game.getPlayers();
         for (int i = 0; i < players.length - 1; i++) {
+            showPlayerCards(players[i], i);
             budgets[i].setText("Budget: " + players[i].getBudget());
             bets[i].setText("Bet: " + players[i].getCurrentBet());
             states[i].setForeground(getStatusColor(players[i].getLastAction()));
             states[i].setText("State: " + players[i].getLastActionName());
         }
+        showPlayerCards(humanPlayer, cards1.length - 1);
         lblHumanBudget.setText("Your budget: " + humanPlayer.getBudget());
         lblHumanBet.setText("Your bet: " + humanPlayer.getCurrentBet());
         lblHumanState.setForeground(getStatusColor(humanPlayer.getLastAction()));
@@ -244,6 +240,18 @@ public class TxHoldemForm extends JFrame {
             btnCall.setEnabled(canCall);
             btnRaise.setEnabled(canRise);
         }
+    }
+
+    private void showPlayerCards(TxHoldemPlayer player, int playerNum) {
+        if (!params.isXRayEnabled() && player.getLastAction() == Player.ACTION_FOLD) {
+            drawEmptyCards(new JLabel[]{cards1[playerNum], cards2[playerNum]});
+            return;
+        }
+        boolean showCard = player == game.getHumanPlayer()
+                || params.isXRayEnabled()
+                || game.getState() == Game.FINISHED && game.getActivePlayersCount() > 1;
+        cards1[playerNum].setIcon(getIconForCard(player.getOwnHand(0), showCard));
+        cards2[playerNum].setIcon(getIconForCard(player.getOwnHand(1), showCard));
     }
 
     private void showContinueGameDialogue() {
@@ -268,11 +276,7 @@ public class TxHoldemForm extends JFrame {
     private void showTable() {
         for (int i = 0; i < 5; i++) {
             Card card = game.getTable(i);
-            if (card != null) {
-                tableCards[i].setIcon(getIconForCard(card, true));
-            } else {
-                tableCards[i].setIcon(getIconForName(getIconFileName("empty")));
-            }
+            tableCards[i].setIcon(getIconForCard(card, true));
         }
     }
 
