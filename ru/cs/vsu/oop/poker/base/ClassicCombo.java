@@ -174,7 +174,12 @@ public class ClassicCombo extends AbstractCombination{
         Card[] buffer = hand.getSortedHand().clone();
         Card[] res = getBestNOfAKind(hand, buffer, 3, 0);
         if (res != null) {
-            return getBestNOfAKind(hand, buffer,2, 3);
+            Card[] tmp = getBestNOfAKind(hand, buffer,2, 3);
+            if (tmp == null && buffer.length > 5) {
+                return getBestNOfAKind(hand, buffer, 3, 3);
+            } else {
+                return tmp;
+            }
         }
         return null;
     }
@@ -183,7 +188,7 @@ public class ClassicCombo extends AbstractCombination{
         int firstIndexOf = -1;
         for (int i = startIndex; i < buffer.length; i++) {
             Card card = buffer[i];
-            if (hand.getCardsCount(card.getName()) >= count) {
+            if (hand.getCardsCount(card.getName()) == count) {
                 firstIndexOf = i;
                 break;
             }
