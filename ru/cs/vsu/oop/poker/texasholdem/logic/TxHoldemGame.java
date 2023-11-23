@@ -1,6 +1,7 @@
 package ru.cs.vsu.oop.poker.texasholdem.logic;
 
 import ru.cs.vsu.oop.poker.base.Card;
+import ru.cs.vsu.oop.poker.base.ClassicCombo;
 import ru.cs.vsu.oop.poker.base.Game;
 import ru.cs.vsu.oop.poker.base.Player;
 
@@ -18,7 +19,7 @@ public class TxHoldemGame extends Game {
     private static final int FLOP = 1;
     private static final int TERN = 2;
     private static final int REAVER = 3;
-    public TxHoldemGame(int numberOfBots, double budget) {
+    public TxHoldemGame(int numberOfBots, double budget, ClassicCombo cd) {
         players = new TxHoldemPlayer[numberOfBots + 1];
         players[numberOfBots] = new TxHoldemPlayer(budget, false);
         for (int i = 0; i < numberOfBots; i++) {
@@ -27,6 +28,7 @@ public class TxHoldemGame extends Game {
         this.state = PREFLOP;
         this.inStreet = false;
         this.betStep = budget / 100;
+        this.comboDefinition = cd;
     }
     public void doStep(int humanAction) {
         if (inStreet) {
@@ -87,7 +89,7 @@ public class TxHoldemGame extends Game {
             return res;
         }
         for (TxHoldemPlayer player: (TxHoldemPlayer[]) players) {
-            player.findBestHand(table);
+            player.findBestHand(table, comboDefinition) ;
         }
         return super.getGameWinners(false);
     }

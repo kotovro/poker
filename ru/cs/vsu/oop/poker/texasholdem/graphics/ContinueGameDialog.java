@@ -1,6 +1,6 @@
 package ru.cs.vsu.oop.poker.texasholdem.graphics;
 
-import ru.cs.vsu.oop.poker.base.Hand;
+import ru.cs.vsu.oop.poker.base.UniversalHand;
 import ru.cs.vsu.oop.poker.base.Player;
 
 import javax.swing.*;
@@ -82,10 +82,10 @@ public class ContinueGameDialog extends JDialog {
         this.setLocationRelativeTo(parent);
     }
 
-    private void showHand(JLabel[] cards, Hand hand) {
+    private void showHand(JLabel[] cards, UniversalHand hand) {
         for(int i = 0; i < 5; i++) {
             cards[i].setText("");
-            cards[i].setIcon(getIconForCard(hand.getHand()[i], true));
+            cards[i].setIcon(getIconForCard(hand.getActualHand()[i], true));
         }
     }
 }

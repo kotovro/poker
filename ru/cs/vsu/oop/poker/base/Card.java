@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-public class Card implements Comparable<Card> {
+public final class Card implements Comparable<Card> {
     @Override
     public int compareTo(Card c) {
         return Integer.compare(this.name.getCardWeight(), c.name.getCardWeight());
@@ -60,8 +60,8 @@ public class Card implements Comparable<Card> {
             return lookup.get(weight);
         }
     }
-    private Suits suit;
-    private CardNames name;
+    private final Suits suit;
+    private final CardNames name;
 
     public Suits getSuit() {
         return suit;

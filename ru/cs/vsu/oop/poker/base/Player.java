@@ -11,11 +11,11 @@ public class Player {
     public final static int ACTION_FOLD = 4;
     protected final boolean isBot;
 
-    public Hand getHand() {
+    public UniversalHand getHand() {
         return hand;
     }
 
-    protected Hand hand;
+    protected UniversalHand hand;
     protected double budget;
     protected double currentBet;
 

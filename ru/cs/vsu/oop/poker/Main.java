@@ -1,6 +1,7 @@
 package ru.cs.vsu.oop.poker;
 
 import ru.cs.vsu.oop.poker.base.Card;
+import ru.cs.vsu.oop.poker.base.ClassicCombo;
 import ru.cs.vsu.oop.poker.base.Game;
 import ru.cs.vsu.oop.poker.base.Player;
 import ru.cs.vsu.oop.poker.texasholdem.graphics.TxHoldemForm;
@@ -36,7 +37,7 @@ public class Main {
             if (input.equalsIgnoreCase("y")) {
                 isDebug = true;
             }
-            TxHoldemGame game = new TxHoldemGame(botsCount, budget);
+            TxHoldemGame game = new TxHoldemGame(botsCount, budget, new ClassicCombo());
             int action = -1;
             while (game.getState() != Game.FINISHED) {
                 game.doStep(action);

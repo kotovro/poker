@@ -16,6 +16,7 @@ public class Game {
     protected int state;
     protected boolean inStreet;
     protected Player[] winners;
+    protected AbstractCombination comboDefinition;
 
 
     public Player[] getPlayers() {

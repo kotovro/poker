@@ -1,6 +1,7 @@
 package ru.cs.vsu.oop.poker.texasholdem.graphics;
 
 import ru.cs.vsu.oop.poker.base.Card;
+import ru.cs.vsu.oop.poker.base.ClassicCombo;
 import ru.cs.vsu.oop.poker.base.Game;
 import ru.cs.vsu.oop.poker.base.Player;
 import ru.cs.vsu.oop.poker.texasholdem.logic.TxHoldemGame;
@@ -313,7 +314,7 @@ public class TxHoldemForm extends JFrame {
     }
 
     private void newGame() {
-        game = new TxHoldemGame(params.getBotCount(), params.getBudget());
+        game = new TxHoldemGame(params.getBotCount(), params.getBudget(), new ClassicCombo());
         humanPlayer = (TxHoldemPlayer) game.getHumanPlayer();
         startGame();
     }
