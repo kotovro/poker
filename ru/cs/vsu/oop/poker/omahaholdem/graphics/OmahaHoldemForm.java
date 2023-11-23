@@ -4,6 +4,8 @@ import ru.cs.vsu.oop.poker.base.Card;
 import ru.cs.vsu.oop.poker.base.ClassicCombo;
 import ru.cs.vsu.oop.poker.base.Game;
 import ru.cs.vsu.oop.poker.base.Player;
+import ru.cs.vsu.oop.poker.omahaholdem.logic.OmahaHoldemGame;
+import ru.cs.vsu.oop.poker.omahaholdem.logic.OmahaHoldemPlayer;
 import ru.cs.vsu.oop.poker.texasholdem.logic.TxHoldemGame;
 import ru.cs.vsu.oop.poker.texasholdem.logic.TxHoldemPlayer;
 
@@ -99,7 +101,7 @@ public class OmahaHoldemForm extends JFrame {
     private JLabel lblPlayer5card4;
     private JLabel lblPlayer1card4;
 
-    private TxHoldemGame game;
+    private OmahaHoldemGame game;
     private JLabel[] names = {lblPlayer1Name, lblPlayer2Name, lblPlayer3Name, lblPlayer4Name, lblPlayer5Name, lblPlayer6Name};
     private JLabel[] budgets = {lblPlayer1Budget, lblPlayer2Budget, lblPlayer3Budget, lblPlayer4Budget, lblPlayer5Budget, lblPlayer6Budget};
     private JLabel[] bets = {lblPlayer1Bet, lblPlayer2Bet, lblPlayer3Bet, lblPlayer4Bet, lblPlayer5Bet, lblPlayer6Bet};
@@ -111,7 +113,7 @@ public class OmahaHoldemForm extends JFrame {
     private JPanel[] botPanels = {panelBot1, panelBot2, panelBot3, panelBot4, panelBot5, panelBot6};
     private JLabel[] tableCards = {lblTableCard1, lblTableCard2, lblTableCard3, lblTableCard4, lblTableCard5};
     private JLabel[] humanCards = {lblHumanCard1, lblHumanCard2, lblHumanCard3, lblHumanCard4};
-    private TxHoldemPlayer humanPlayer;
+    private OmahaHoldemPlayer humanPlayer;
     private GameParams params = new GameParams();
     private ParamsDialog dialogParams = new ParamsDialog(this.panelTable, params, e -> {
         newGame();
@@ -164,7 +166,7 @@ public class OmahaHoldemForm extends JFrame {
     }
 
     private void startGame() {
-        TxHoldemPlayer[] players = (TxHoldemPlayer[]) game.getPlayers();
+        OmahaHoldemPlayer[] players = (OmahaHoldemPlayer[]) game.getPlayers();
         game.doStep(Game.CONTINUE_BETS);
         for (int i = 0; i < players.length - 1; i++) {
             botPanels[i].setVisible(true);
@@ -234,7 +236,7 @@ public class OmahaHoldemForm extends JFrame {
 
 
     public void showGameState() {
-        TxHoldemPlayer[] players = (TxHoldemPlayer[]) game.getPlayers();
+        OmahaHoldemPlayer[] players = (OmahaHoldemPlayer[]) game.getPlayers();
         for (int i = 0; i < players.length - 1; i++) {
             showPlayerCards(players[i], i);
             budgets[i].setText("Budget: " + players[i].getBudget());
@@ -266,7 +268,7 @@ public class OmahaHoldemForm extends JFrame {
         }
     }
 
-    private void showPlayerCards(TxHoldemPlayer player, int playerNum) {
+    private void showPlayerCards(OmahaHoldemPlayer player, int playerNum) {
         if (!params.isXRayEnabled() && player.getLastAction() == Player.ACTION_FOLD) {
             drawEmptyCards(new JLabel[]{cards1[playerNum], cards2[playerNum], cards3[playerNum], cards4[playerNum]});
             return;
@@ -340,8 +342,8 @@ public class OmahaHoldemForm extends JFrame {
     }
 
     private void newGame() {
-        game = new TxHoldemGame(params.getBotCount(), params.getBudget(), new ClassicCombo());
-        humanPlayer = (TxHoldemPlayer) game.getHumanPlayer();
+        game = new OmahaHoldemGame(params.getBotCount(), params.getBudget(), new ClassicCombo());
+        humanPlayer = (OmahaHoldemPlayer) game.getHumanPlayer();
         startGame();
     }
     public class GameParams {
