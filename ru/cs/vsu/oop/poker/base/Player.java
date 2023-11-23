@@ -1,7 +1,5 @@
 package ru.cs.vsu.oop.poker.base;
 
-import java.io.File;
-import java.util.Arrays;
 
 public class Player {
     public final static int ACTION_NONE = 0;
@@ -23,10 +21,6 @@ public class Player {
     public Player(double budget, boolean isBot) {
         this.budget = budget;
         this.isBot = isBot;
-    }
-    public Player(){
-        this.budget = 0;
-        isBot = false;
     }
 
     public int getLastAction() {
