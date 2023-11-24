@@ -18,8 +18,8 @@ public class TxHoldemPlayer extends Player {
             cardBuffer[i] = ownHand[i - table.length];
 
         }
-        hand = new UniversalHand(cardBuffer);
-        AbstractCombination.SearchResult res = cmb.findCombination(hand);
+        hand = new UniversalHand();
+        AbstractCombination.SearchResult res = cmb.findCombination(cardBuffer);
         hand.setBestHand(res.getBestCombo());
         hand.setRank(res.getRank());
     }
