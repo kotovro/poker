@@ -1,10 +1,11 @@
 package ru.cs.vsu.oop.poker.base;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 public class ClassicCombo extends AbstractCombination{
+
+    private HashMap<Card.CardNames, Integer> cardsCount = new HashMap<>();
+    private HashMap<Card.Suits, Integer> suitsCount = new HashMap<>();
     public ClassicCombo() {
         this.comboNames = new LinkedList<>();
         this.comboWeight = new HashMap<>();
@@ -29,7 +30,7 @@ public class ClassicCombo extends AbstractCombination{
         this.comboWeight.put("FOUR_OF_A_KIND", 7);
         this.comboWeight.put("STRAIGHT_FLUSH", 8);
 
-        this.finder.put("NONE", h -> h.getSortedHand());
+        this.finder.put("NONE", h -> h);
         this.finder.put("PAIR", h -> getBestPair(h));
         this.finder.put("TWO_PAIR",h -> getBestTwoPair(h));
         this.finder.put("THREE_OF_A_KIND",h -> getBesThreeOfAKind(h));
@@ -39,14 +40,41 @@ public class ClassicCombo extends AbstractCombination{
         this.finder.put("FOUR_OF_A_KIND", h -> getBestFourOfAKind(h));
         this.finder.put("STRAIGHT_FLUSH", h -> getStraightFlush(h));
     }
-    public static Card[] getBestStraight(UniversalHand hand) {
+
+    @Override
+    public SearchResult findCombination(Card[] hand) {
+        Arrays.sort(hand, Collections.reverseOrder());
+        buildMaps(hand);
+        return super.findCombination(hand);
+        
+    }
+    public int getCardsCount(Card.CardNames cardName) {
+        return cardsCount.get(cardName);
+    }
+    public int getSuitsCount(Card.Suits suit) {
+        return suitsCount.get(suit);
+    }
+
+    private void buildMaps(Card[] hand) {
+        for (Card.Suits suit: Card.Suits.values()) {
+            suitsCount.put(suit, 0);
+        }
+        for (Card.CardNames cardName: Card.CardNames.values()) {
+            cardsCount.put(cardName, 0);
+        }
+        for (Card card: hand) {
+            suitsCount.put(card.getSuit(), suitsCount.get(card.getSuit()) + 1);
+            cardsCount.put(card.getName(), cardsCount.get(card.getName()) + 1);
+        }
+    }
+    public static Card[] getBestStraight(Card[] hand) {
         return getBestStraight(hand, null);
     }
 
-    public static Card[] getStraightFlush(UniversalHand hand) {
+    public Card[] getStraightFlush(Card[] hand) {
         Card.Suits suit = null;
         for (Card.Suits s: Card.Suits.values()) {
-            if (hand.getSuitsCount(s) > 4) {
+            if (getSuitsCount(s) > 4) {
                 suit = s;
                 break;
             }
@@ -56,8 +84,8 @@ public class ClassicCombo extends AbstractCombination{
         }
         return null;
     }
-    private static Card[] getBestStraight(UniversalHand hand, Card.Suits suit) {
-        Card[] buffer = hand.getSortedHand().clone();
+    private static Card[] getBestStraight(Card[] hand, Card.Suits suit) {
+        Card[] buffer = hand.clone();
         int inStraight = 0;
         int firstIndexOf = -1;
         boolean aceFound = buffer[0].getName().equals(Card.CardNames.ACE)
@@ -119,11 +147,11 @@ public class ClassicCombo extends AbstractCombination{
         return false;
     }
 
-    public static Card[] getBestFlush(UniversalHand hand) {
-        Card[] buffer = hand.getSortedHand().clone();
+    public Card[] getBestFlush(Card[] hand) {
+        Card[] buffer = hand.clone();
         Card.Suits suit = null;
         for (int i = 0; i < buffer.length - 4; i++) {
-            if (hand.getSuitsCount(buffer[i].getSuit()) > 4) {
+            if (getSuitsCount(buffer[i].getSuit()) > 4) {
                 suit = buffer[i].getSuit();
                 break;
             }
@@ -150,28 +178,28 @@ public class ClassicCombo extends AbstractCombination{
         }
         return buffer;
     }
-    public static Card[] getBestPair(UniversalHand hand) {
-        Card[] buffer = hand.getSortedHand().clone();
+    public Card[] getBestPair(Card[] hand) {
+        Card[] buffer = hand.clone();
         return getBestNOfAKind(hand, buffer, 2, 0);
     }
-    public static Card[] getBesThreeOfAKind(UniversalHand hand) {
-        Card[] buffer = hand.getSortedHand().clone();
+    public Card[] getBesThreeOfAKind(Card[] hand) {
+        Card[] buffer = hand.clone();
         return getBestNOfAKind(hand, buffer,3, 0);
     }
-    public static Card[] getBestFourOfAKind(UniversalHand hand) {
-        Card[] buffer = hand.getSortedHand().clone();
+    public Card[] getBestFourOfAKind(Card[] hand) {
+        Card[] buffer = hand.clone();
         return getBestNOfAKind(hand, buffer, 4, 0);
     }
-    public static Card[] getBestTwoPair(UniversalHand hand) {
-        Card[] buffer = hand.getSortedHand().clone();
+    public Card[] getBestTwoPair(Card[] hand) {
+        Card[] buffer = hand.clone();
         Card[] res = getBestNOfAKind(hand, buffer, 2, 0);
         if (res != null) {
             return getBestNOfAKind(hand, buffer,2, 2);
         }
         return null;
     }
-    public static Card[] getBestFullHouse(UniversalHand hand) {
-        Card[] buffer = hand.getSortedHand().clone();
+    public Card[] getBestFullHouse(Card[] hand) {
+        Card[] buffer = hand.clone();
         Card[] res = getBestNOfAKind(hand, buffer, 3, 0);
         if (res != null) {
             Card[] tmp = getBestNOfAKind(hand, buffer,2, 3);
@@ -184,11 +212,11 @@ public class ClassicCombo extends AbstractCombination{
         return null;
     }
 
-    private static Card[] getBestNOfAKind(UniversalHand hand, Card[] buffer, int count, int startIndex) {
+    private Card[] getBestNOfAKind(Card[] hand, Card[] buffer, int count, int startIndex) {
         int firstIndexOf = -1;
         for (int i = startIndex; i < buffer.length; i++) {
             Card card = buffer[i];
-            if (hand.getCardsCount(card.getName()) == count) {
+            if (getCardsCount(card.getName()) == count) {
                 firstIndexOf = i;
                 break;
             }

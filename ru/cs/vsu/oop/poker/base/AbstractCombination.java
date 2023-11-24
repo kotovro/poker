@@ -47,8 +47,8 @@ public abstract class AbstractCombination {
         }
     }
 
-    public SearchResult findCombination(UniversalHand hand) {
-        Card[] bestCombo = hand.getSortedHand();
+    public SearchResult findCombination(Card[] hand) {
+        Card[] bestCombo = hand;
         String bestName = "";
         int bestRank = 0;
         for (String comboName: this.comboNames) {
