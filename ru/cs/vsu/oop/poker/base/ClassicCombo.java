@@ -84,39 +84,60 @@ public class ClassicCombo extends AbstractCombination{
         }
         return null;
     }
-    private static Card[] getBestStraight(Card[] hand, Card.Suits suit) {
-        Card[] buffer = hand.clone();
-        int inStraight = 0;
-        int firstIndexOf = -1;
-        boolean aceFound = buffer[0].getName().equals(Card.CardNames.ACE)
-                && suit == null || isAceSuitFound(buffer, suit);
+    private static Card[] getBestStraight(Card[] buffer, Card.Suits suit) {
+        int inStraight = 1;
+        boolean isWheel = false;
+        boolean aceFound = isAceSuitFound(buffer, suit);
+        int startIndex = -1;
+        LinkedList<Integer> skipIndexes = new LinkedList<>();
+
+
+        int straightPosition = 0;
+
         for (int i = 0; i < buffer.length - 1; i++) {
-            if (inStraight == 4
-                    && buffer[i].getName().equals(Card.CardNames.TWO)
-                    && aceFound) {
-                break; // wheel condition: when ace's weight is equal ONE
+            if (startIndex < 0 && (suit == null || buffer[i].getSuit().equals(suit))) {
+                startIndex = i;
+                straightPosition = buffer[i].getName().getCardWeight();
+            } else if (startIndex < 0) {
+                continue;
             }
-            if (buffer[i].getName().getCardWeight() == buffer[i+1].getName().getCardWeight() + 1 //regular straight
-                    && (suit == null || buffer[i].getSuit().equals(suit) && buffer[i + 1].getSuit().equals(suit))) {
+            if (straightPosition == buffer[i + 1].getName().getCardWeight() + 1 //regular straight
+                    && (suit == null || buffer[i + 1].getSuit().equals(suit))) {
+
+                straightPosition = buffer[i + 1].getName().getCardWeight();
                 inStraight++;
-                if (firstIndexOf < 0) {
-                    firstIndexOf = i;
+                if (inStraight == 5) {
+                    break;
                 }
+                if (inStraight == 4
+                        && buffer[i + 1].getName().equals(Card.CardNames.TWO)
+                        && aceFound) {
+                    // wheel condition: when ace's weight is equal ONE
+                    if (suit != null) {
+                        adjustAcePosition(buffer, suit);
+                    }
+                    isWheel = true;
+                    break;
+                }
+            } else if (straightPosition == buffer[i + 1].getName().getCardWeight()
+                || straightPosition == buffer[i + 1].getName().getCardWeight() + 1) {
+                skipIndexes.add(i + 1);
             } else {
-                inStraight = 0;
-                firstIndexOf = -1;
+                inStraight = 1;
+                startIndex = -1;
+                straightPosition = buffer[i + 1].getName().getCardWeight();
+                skipIndexes.clear();
             }
         }
-        if (inStraight == 4
-                && buffer[firstIndexOf + 3].getName().equals(Card.CardNames.TWO)
-                && aceFound) {
-            // wheel condition: when ace's weight is equal ONE
-            if (suit != null) {
-                adjustAcePosition(buffer, suit);
+        if (inStraight == 4 && isWheel || inStraight == 5) {
+            int moveTo = 0;
+            for (Integer index : skipIndexes) {
+                buffer = moveTo(buffer, moveTo, index - startIndex, startIndex);
+                inStraight -= index - startIndex;
+                moveTo += index - startIndex;
+                startIndex = index + 1;
             }
-            return moveTo(buffer, 0, 4, firstIndexOf);
-        } else if (inStraight > 4) {
-            return moveTo(buffer, 0, 5, firstIndexOf);
+            return moveTo(buffer, moveTo, inStraight, startIndex);
         } else {
             return null;
         }
@@ -139,7 +160,7 @@ public class ClassicCombo extends AbstractCombination{
     private static boolean isAceSuitFound(Card[] buffer, Card.Suits suit) {
         int i = 0;
         while(buffer[i].getName().equals(Card.CardNames.ACE)) {
-            if (buffer[i].getSuit().equals(suit)) {
+            if (suit == null || buffer[i].getSuit().equals(suit)) {
                 return true;
             }
             i++;
@@ -228,17 +249,18 @@ public class ClassicCombo extends AbstractCombination{
         }
     }
 
-    private static Card[] moveTo(Card[] buffer, int startIndex, int amount, int firstIndex) {
+    //move {amount} of elemnts from {moveFrom} position to {moveTo} position
+    private static Card[] moveTo(Card[] buffer, int moveTo, int amount, int moveFrom) {
 
-        Card[] tmp = new Card[firstIndex - startIndex];
-        for (int i = startIndex; i < firstIndex; i++) {
-            tmp[i - startIndex] = buffer[i];
+        Card[] tmp = new Card[moveFrom - moveTo];
+        for (int i = moveTo; i < moveFrom; i++) {
+            tmp[i - moveTo] = buffer[i];
         }
-        for (int i = startIndex; i < startIndex + amount; i++) {
-            buffer[i] = buffer[firstIndex + i - startIndex];
+        for (int i = moveTo; i < moveTo + amount; i++) {
+            buffer[i] = buffer[moveFrom + i - moveTo];
         }
-        for (int i = startIndex + amount; i < firstIndex + amount; i++) {
-            buffer[i] = tmp[i - startIndex - amount];
+        for (int i = moveTo + amount; i < moveFrom + amount; i++) {
+            buffer[i] = tmp[i - moveTo - amount];
         }
         return buffer;
     }

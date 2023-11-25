@@ -49,10 +49,10 @@ public abstract class AbstractCombination {
 
     public SearchResult findCombination(Card[] hand) {
         Card[] bestCombo = hand;
-        String bestName = "";
+        String bestName = "NONE";
         int bestRank = 0;
         for (String comboName: this.comboNames) {
-            Card[] candidate = getFinder(comboName).find(hand);
+            Card[] candidate = getFinder(comboName).find(hand.clone());
             if (candidate != null && getRank(comboName) > bestRank) {
                 bestRank = getRank(comboName);
                 bestCombo = candidate;

@@ -15,8 +15,8 @@ public class OmahaHoldemPlayer extends Player {
     public void findBestHand(Card[] table, AbstractCombination cmb) {
         UniversalHand bestHand = null;
         Card[] cardBuffer = new Card[table.length];
-        for (int i = 0; i < 2; i++) {
-            for (int j = i + 1; j < 3; j++) {
+        for (int i = 0; i < ownHand.length - 1; i++) {
+            for (int j = i + 1; j < ownHand.length; j++) {
                 for (int k = 0; k < table.length - 2; k++) {
                     for (int l = k + 1; l < table.length - 1; l++) {
                         for (int m = l + 1; m < table.length; m++) {
@@ -25,8 +25,9 @@ public class OmahaHoldemPlayer extends Player {
                             cardBuffer[2] = table[k];
                             cardBuffer[3] = table[l];
                             cardBuffer[4] = table[m];
-                            UniversalHand  candidate = new UniversalHand(cardBuffer);
-                            AbstractCombination.SearchResult res = cmb.findCombination(candidate);
+                            AbstractCombination.SearchResult res = cmb.findCombination(cardBuffer);
+
+                            UniversalHand  candidate = new UniversalHand();
                             candidate.setBestHand(res.getBestCombo());
                             candidate.setRank(res.getRank());
                             if (bestHand == null || bestHand.compareTo(candidate) < 0) {
