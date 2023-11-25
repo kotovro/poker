@@ -3,13 +3,10 @@ package ru.cs.vsu.oop.poker;
 import ru.cs.vsu.oop.poker.base.AbstractCombination;
 import ru.cs.vsu.oop.poker.base.Card;
 import ru.cs.vsu.oop.poker.base.ClassicCombo;
-import ru.cs.vsu.oop.poker.base.Player;
-import ru.cs.vsu.oop.poker.omahaholdem.graphics.OmahaHoldemForm;
-import ru.cs.vsu.oop.poker.texasholdem.logic.TxHoldemGame;
-import ru.cs.vsu.oop.poker.texasholdem.logic.TxHoldemPlayer;
+import ru.cs.vsu.oop.poker.graphics.OmahaHoldemForm;
+import ru.cs.vsu.oop.poker.graphics.TxHoldemForm;
 
 import javax.swing.*;
-import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {

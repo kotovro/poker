@@ -1,13 +1,13 @@
-package ru.cs.vsu.oop.poker.texasholdem.graphics;
+package ru.cs.vsu.oop.poker.graphics;
 
-import ru.cs.vsu.oop.poker.base.UniversalHand;
 import ru.cs.vsu.oop.poker.base.Player;
+import ru.cs.vsu.oop.poker.base.UniversalHand;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionListener;
 
-import static ru.cs.vsu.oop.poker.texasholdem.graphics.GUIHelper.getIconForCard;
+import static ru.cs.vsu.oop.poker.graphics.GUIHelper.getIconForCard;
 
 public class ContinueGameDialog extends JDialog {
     private JPanel panel1;

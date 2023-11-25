@@ -1,4 +1,4 @@
-package ru.cs.vsu.oop.poker.omahaholdem.logic;
+package ru.cs.vsu.oop.poker.games.logic.omahaholdem;
 
 import ru.cs.vsu.oop.poker.base.AbstractCombination;
 import ru.cs.vsu.oop.poker.base.Card;

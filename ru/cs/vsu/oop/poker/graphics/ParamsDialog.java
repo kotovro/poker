@@ -1,4 +1,6 @@
-package ru.cs.vsu.oop.poker.omahaholdem.graphics;
+package ru.cs.vsu.oop.poker.graphics;
+
+import ru.cs.vsu.oop.poker.games.GameParams;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -14,9 +16,9 @@ public class ParamsDialog extends JDialog {
     private JButton btnApply;
     private JButton btnCancel;
 
-    private OmahaHoldemForm.GameParams params;
+    private GameParams params;
 
-    public ParamsDialog(JComponent parent, OmahaHoldemForm.GameParams params, ActionListener newGameAction) {
+    public ParamsDialog(JComponent parent, GameParams params, ActionListener newGameAction) {
         this.setTitle("Settings");
         this.setContentPane(panelMain);
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);

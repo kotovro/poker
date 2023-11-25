@@ -1,19 +1,21 @@
-package ru.cs.vsu.oop.poker.texasholdem.graphics;
+package ru.cs.vsu.oop.poker.graphics;
 
 import ru.cs.vsu.oop.poker.base.Card;
 import ru.cs.vsu.oop.poker.base.ClassicCombo;
 import ru.cs.vsu.oop.poker.base.Game;
 import ru.cs.vsu.oop.poker.base.Player;
-import ru.cs.vsu.oop.poker.texasholdem.logic.TxHoldemGame;
-import ru.cs.vsu.oop.poker.texasholdem.logic.TxHoldemPlayer;
+import ru.cs.vsu.oop.poker.games.GameParams;
+import ru.cs.vsu.oop.poker.games.logic.omahaholdem.OmahaHoldemGame;
+import ru.cs.vsu.oop.poker.games.logic.omahaholdem.OmahaHoldemPlayer;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-import static ru.cs.vsu.oop.poker.texasholdem.graphics.GUIHelper.*;
+import static ru.cs.vsu.oop.poker.graphics.GUIHelper.getIconForCard;
+import static ru.cs.vsu.oop.poker.graphics.GUIHelper.getStatusColor;
 
-public class TxHoldemForm extends JFrame {
+public class OmahaHoldemForm extends JFrame {
 
     private JPanel panelTable;
     private JPanel panelLeft;
@@ -83,24 +85,40 @@ public class TxHoldemForm extends JFrame {
     private JLabel lblTableCard3;
     private JLabel lblTableCard4;
     private JLabel lblTableCard5;
+    private JLabel lblPlayer1card3;
+    private JLabel lblPlayer3card3;
+    private JLabel lblPlayer3card4;
+    private JLabel lblPlayer2card3;
+    private JLabel lblPlayer2card4;
+    private JLabel lblPlayer4card3;
+    private JLabel lblPlayer4card4;
+    private JLabel lblPlayer6card3;
+    private JLabel lblPlayer6card4;
+    private JLabel lblHumanCard3;
+    private JLabel lblHumanCard4;
+    private JLabel lblPlayer5card3;
+    private JLabel lblPlayer5card4;
+    private JLabel lblPlayer1card4;
 
-    private TxHoldemGame game;
+    private OmahaHoldemGame game;
     private JLabel[] names = {lblPlayer1Name, lblPlayer2Name, lblPlayer3Name, lblPlayer4Name, lblPlayer5Name, lblPlayer6Name};
     private JLabel[] budgets = {lblPlayer1Budget, lblPlayer2Budget, lblPlayer3Budget, lblPlayer4Budget, lblPlayer5Budget, lblPlayer6Budget};
     private JLabel[] bets = {lblPlayer1Bet, lblPlayer2Bet, lblPlayer3Bet, lblPlayer4Bet, lblPlayer5Bet, lblPlayer6Bet};
     private JLabel[] states = {lblPlayer1State, lblPlayer2State, lblPlayer3State, lblPlayer4State, lblPlayer5State, lblPlayer6State};
     private JLabel[] cards1 = {lblPlayer1card1, lblPlayer2card1, lblPlayer3card1, lblPlayer4card1, lblPlayer5card1, lblPlayer6card1, lblHumanCard1};
     private JLabel[] cards2 = {lblPlayer1card2, lblPlayer2card2, lblPlayer3card2, lblPlayer4card2, lblPlayer5card2, lblPlayer6card2, lblHumanCard2};
+    private JLabel[] cards3 = {lblPlayer1card3, lblPlayer2card3, lblPlayer3card3, lblPlayer4card3, lblPlayer5card3, lblPlayer6card3, lblHumanCard3};
+    private JLabel[] cards4 = {lblPlayer1card4, lblPlayer2card4, lblPlayer3card4, lblPlayer4card4, lblPlayer5card4, lblPlayer6card4, lblHumanCard4};
     private JPanel[] botPanels = {panelBot1, panelBot2, panelBot3, panelBot4, panelBot5, panelBot6};
     private JLabel[] tableCards = {lblTableCard1, lblTableCard2, lblTableCard3, lblTableCard4, lblTableCard5};
-    private JLabel[] humanCards = {lblHumanCard1, lblHumanCard2};
-    private TxHoldemPlayer humanPlayer;
+    private JLabel[] humanCards = {lblHumanCard1, lblHumanCard2, lblHumanCard3, lblHumanCard4};
+    private OmahaHoldemPlayer humanPlayer;
     private GameParams params = new GameParams();
     private ParamsDialog dialogParams = new ParamsDialog(this.panelTable, params, e -> {
         newGame();
     });
 
-    public TxHoldemForm() {
+    public OmahaHoldemForm() {
 
         initControls();
 
@@ -147,17 +165,21 @@ public class TxHoldemForm extends JFrame {
     }
 
     private void startGame() {
-        TxHoldemPlayer[] players = (TxHoldemPlayer[]) game.getPlayers();
+        OmahaHoldemPlayer[] players = (OmahaHoldemPlayer[]) game.getPlayers();
         game.doStep(Game.CONTINUE_BETS);
         for (int i = 0; i < players.length - 1; i++) {
             botPanels[i].setVisible(true);
             names[i].setText("Bot player " + (i + 1));
             cards1[i].setIcon(getIconForCard(players[i].getOwnHand(0), params.isXRayEnabled()));
             cards2[i].setIcon(getIconForCard(players[i].getOwnHand(1), params.isXRayEnabled()));
+            cards3[i].setIcon(getIconForCard(players[i].getOwnHand(2), params.isXRayEnabled()));
+            cards4[i].setIcon(getIconForCard(players[i].getOwnHand(3), params.isXRayEnabled()));
         }
         hideUnusedBots(players.length);
         lblHumanCard1.setIcon(getIconForCard(humanPlayer.getOwnHand(0), true));
         lblHumanCard2.setIcon(getIconForCard(humanPlayer.getOwnHand(1), true));
+        lblHumanCard3.setIcon(getIconForCard(humanPlayer.getOwnHand(2), true));
+        lblHumanCard4.setIcon(getIconForCard(humanPlayer.getOwnHand(3), true));
         panelTable.setPreferredSize(new Dimension(800, 800));
         showGameState();
     }
@@ -177,6 +199,8 @@ public class TxHoldemForm extends JFrame {
         drawEmptyCards(tableCards);
         drawEmptyCards(cards1);
         drawEmptyCards(cards2);
+        drawEmptyCards(cards3);
+        drawEmptyCards(cards4);
         drawEmptyCards(humanCards);
         Font bankFont = new Font(lblBank.getFont().getName(), Font.PLAIN, 20);
         lblBank.setFont(bankFont);
@@ -211,7 +235,7 @@ public class TxHoldemForm extends JFrame {
 
 
     public void showGameState() {
-        TxHoldemPlayer[] players = (TxHoldemPlayer[]) game.getPlayers();
+        OmahaHoldemPlayer[] players = (OmahaHoldemPlayer[]) game.getPlayers();
         for (int i = 0; i < players.length - 1; i++) {
             showPlayerCards(players[i], i);
             budgets[i].setText("Budget: " + players[i].getBudget());
@@ -243,9 +267,9 @@ public class TxHoldemForm extends JFrame {
         }
     }
 
-    private void showPlayerCards(TxHoldemPlayer player, int playerNum) {
+    private void showPlayerCards(OmahaHoldemPlayer player, int playerNum) {
         if (!params.isXRayEnabled() && player.getLastAction() == Player.ACTION_FOLD) {
-            drawEmptyCards(new JLabel[]{cards1[playerNum], cards2[playerNum]});
+            drawEmptyCards(new JLabel[]{cards1[playerNum], cards2[playerNum], cards3[playerNum], cards4[playerNum]});
             return;
         }
         boolean showCard = player == game.getHumanPlayer()
@@ -253,6 +277,9 @@ public class TxHoldemForm extends JFrame {
                 || game.getState() == Game.FINISHED && game.getActivePlayersCount() > 1;
         cards1[playerNum].setIcon(getIconForCard(player.getOwnHand(0), showCard));
         cards2[playerNum].setIcon(getIconForCard(player.getOwnHand(1), showCard));
+        cards3[playerNum].setIcon(getIconForCard(player.getOwnHand(2), showCard));
+        cards4[playerNum].setIcon(getIconForCard(player.getOwnHand(3), showCard));
+
     }
 
     private void showContinueGameDialogue() {
@@ -314,37 +341,9 @@ public class TxHoldemForm extends JFrame {
     }
 
     private void newGame() {
-        game = new TxHoldemGame(params.getBotCount(), params.getBudget(), new ClassicCombo());
-        humanPlayer = (TxHoldemPlayer) game.getHumanPlayer();
+        game = new OmahaHoldemGame(params.getBotCount(), params.getBudget(), new ClassicCombo());
+        humanPlayer = (OmahaHoldemPlayer) game.getHumanPlayer();
         startGame();
     }
-    public class GameParams {
-        boolean isXRayEnabled = false;
-        double budget = 100;
-        int botCount = 4;
 
-        public boolean isXRayEnabled() {
-            return isXRayEnabled;
-        }
-
-        public void setXRayEnabled(boolean XRayEnabled) {
-            isXRayEnabled = XRayEnabled;
-        }
-
-        public double getBudget() {
-            return budget;
-        }
-
-        public void setBudget(double budget) {
-            this.budget = budget;
-        }
-
-        public int getBotCount() {
-            return botCount;
-        }
-
-        public void setBotCount(int botCount) {
-            this.botCount = botCount;
-        }
-    }
 }

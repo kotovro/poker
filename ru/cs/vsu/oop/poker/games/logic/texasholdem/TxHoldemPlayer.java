@@ -1,4 +1,4 @@
-package ru.cs.vsu.oop.poker.texasholdem.logic;
+package ru.cs.vsu.oop.poker.games.logic.texasholdem;
 
 import ru.cs.vsu.oop.poker.base.*;
 

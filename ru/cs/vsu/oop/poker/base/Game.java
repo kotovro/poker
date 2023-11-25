@@ -1,7 +1,5 @@
 package ru.cs.vsu.oop.poker.base;
 
-import ru.cs.vsu.oop.poker.texasholdem.logic.TxHoldemPlayer;
-
 import java.util.ArrayList;
 
 public class Game {

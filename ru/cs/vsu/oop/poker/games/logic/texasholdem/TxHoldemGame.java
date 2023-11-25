@@ -1,4 +1,4 @@
-package ru.cs.vsu.oop.poker.omahaholdem.logic;
+package ru.cs.vsu.oop.poker.games.logic.texasholdem;
 
 import ru.cs.vsu.oop.poker.base.Card;
 import ru.cs.vsu.oop.poker.base.ClassicCombo;
@@ -7,7 +7,7 @@ import ru.cs.vsu.oop.poker.base.Player;
 
 import java.util.Arrays;
 
-public class OmahaHoldemGame extends Game {
+public class TxHoldemGame extends Game {
     private Card[] table = new Card[5];
 
 
@@ -19,11 +19,11 @@ public class OmahaHoldemGame extends Game {
     private static final int FLOP = 1;
     private static final int TERN = 2;
     private static final int REAVER = 3;
-    public OmahaHoldemGame(int numberOfBots, double budget, ClassicCombo cd) {
-        players = new OmahaHoldemPlayer[numberOfBots + 1];
-        players[numberOfBots] = new OmahaHoldemPlayer(budget, false);
+    public TxHoldemGame(int numberOfBots, double budget, ClassicCombo cd) {
+        players = new TxHoldemPlayer[numberOfBots + 1];
+        players[numberOfBots] = new TxHoldemPlayer(budget, false);
         for (int i = 0; i < numberOfBots; i++) {
-            players[i] = new DumbBotOmahaHoldem(budget);
+            players[i] = new DumbBotTxHoldem(budget);
         }
         this.state = PREFLOP;
         this.inStreet = false;
@@ -45,8 +45,8 @@ public class OmahaHoldemGame extends Game {
         }
         switch (state) {
             case PREFLOP -> {
-                for (OmahaHoldemPlayer player: (OmahaHoldemPlayer[]) this.players) {
-                    for (int i = 0; i < 4; i++) {
+                for (TxHoldemPlayer player: (TxHoldemPlayer[]) this.players) {
+                    for (int i = 0; i < 2; i++) {
                         player.setOwnCard(i, deck.drawCard());
                     }
                 }
@@ -88,7 +88,7 @@ public class OmahaHoldemGame extends Game {
         if (res != null) {
             return res;
         }
-        for (OmahaHoldemPlayer player: (OmahaHoldemPlayer[]) players) {
+        for (TxHoldemPlayer player: (TxHoldemPlayer[]) players) {
             player.findBestHand(table, comboDefinition) ;
         }
         return super.getGameWinners(false);
@@ -100,7 +100,7 @@ public class OmahaHoldemGame extends Game {
     @Override
     public void continueGame() {
         super.continueGame();
-        for (OmahaHoldemPlayer player: (OmahaHoldemPlayer[]) players) {
+        for (TxHoldemPlayer player: (TxHoldemPlayer[]) players) {
             player.clearOwnHand();
         }
         clearTable();
