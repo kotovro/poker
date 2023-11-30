@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 public abstract class AbstractCombination implements Comparable<AbstractCombination>, ICombinationFinder{
-    protected HashMap<Card.CardNames, Integer> cardsCount = new HashMap<>();
-    protected HashMap<Card.Suits, Integer> suitsCount = new HashMap<>();
+    protected HashMap<Card.CardNames, Integer> cardsCount;
+    protected HashMap<Card.Suits, Integer> suitsCount;
     protected int rank;
 
     public AbstractCombination(int rank) {
@@ -21,6 +21,8 @@ public abstract class AbstractCombination implements Comparable<AbstractCombinat
     }
 
     protected void createMaps(LinkedList<Card> hand) {
+        suitsCount = new HashMap<>();
+        cardsCount = new HashMap<>();
         for (Card card: hand) {
             int count = 0;
             if (cardsCount.containsKey(card.getName())) {
@@ -48,8 +50,7 @@ public abstract class AbstractCombination implements Comparable<AbstractCombinat
         if (firstIndexOf < 0) {
             return null;
         } else {
-            LinkedList<Card> clone = new LinkedList<>();
-            Collections.copy(clone, hand);
+            LinkedList<Card> clone = new LinkedList<>(hand);
             LinkedList<Card> res = new LinkedList<>();
             for (i = 0; i < countN; i++) {
                 res.add(clone.remove(firstIndexOf));

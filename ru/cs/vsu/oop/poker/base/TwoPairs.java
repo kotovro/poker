@@ -27,8 +27,7 @@ public class TwoPairs extends AbstractCombination {
         if (firstIndexOf < 0) {
             return null;
         }
-        LinkedList<Card> clone = new LinkedList<>();
-        Collections.copy(clone, hand);
+        LinkedList<Card> clone = new LinkedList<>(hand);
         LinkedList<Card> res = new LinkedList<>();
         for (i = 0; i < 2; i++) {
             res.add(clone.remove(firstIndexOf));

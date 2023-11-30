@@ -19,8 +19,7 @@ public enum ClassicCombinationsSet {
         this.combination = combination;
     }
     public static SearchResult findCombination(LinkedList<Card> hand) {
-        LinkedList<Card> clone = new LinkedList<>();
-        Collections.copy(clone, hand);
+        LinkedList<Card> clone = new LinkedList<>(hand);
         clone.sort(Comparator.comparing(Card::getCardWeight, Comparator.reverseOrder()));
 
         LinkedList<Card> bestCombo = clone;

@@ -107,4 +107,8 @@ public class OmahaHoldemGame extends Game {
         this.state = PREFLOP;
         this.inStreet = false;
     }
+
+    public LinkedList<Card> getTable() {
+        return table;
+    }
 }

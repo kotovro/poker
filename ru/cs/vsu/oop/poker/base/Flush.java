@@ -13,6 +13,7 @@ public class Flush extends AbstractCombination {
     }
 
     public LinkedList<Card> find(LinkedList<Card> hand) {
+        createMaps(hand);
         Card.Suits suit = null;
         for (Card card: hand) {
             if(suitsCount.get(card.getSuit()) >= 5) {

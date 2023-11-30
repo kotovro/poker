@@ -309,10 +309,15 @@ public class OmahaHoldemForm extends JFrame {
         dlg.setVisible(true);
     }
 
+
     private void showTable() {
-        for (int i = 0; i < 5; i++) {
-            Card card = game.getTable(i);
+        int i = 0;
+        for (Card card: game.getTable()) {
             tableCards[i].setIcon(getIconForCard(card, true));
+            i++;
+        }
+        for (int j = i; j < 5; j++) {
+            tableCards[j].setIcon(getIconForCard(null, true));
         }
     }
 

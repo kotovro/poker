@@ -18,9 +18,9 @@ public class Main {
             buffer.add(new Card(Card.Suits.HEARTS, Card.CardNames.ACE));
             buffer.add(new Card(Card.Suits.HEARTS, Card.CardNames.FOUR));
             buffer.add(new Card(Card.Suits.HEARTS, Card.CardNames.FIVE));
-            buffer.add(new Card(Card.Suits.HEARTS, Card.CardNames.TWO));
-            buffer.add(new Card(Card.Suits.SPADES, Card.CardNames.FIVE));
-            buffer.add(new Card(Card.Suits.HEARTS, Card.CardNames.EIGHT));
+            //buffer.add(new Card(Card.Suits.HEARTS, Card.CardNames.TWO));
+            buffer.add(new Card(Card.Suits.SPADES, Card.CardNames.THREE));
+            buffer.add(new Card(Card.Suits.DIAMONDS, Card.CardNames.EIGHT));
 
 
             SearchResult searchResult = ClassicCombinationsSet.findCombination(buffer);

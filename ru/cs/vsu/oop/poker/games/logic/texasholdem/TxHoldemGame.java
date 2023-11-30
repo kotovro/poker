@@ -95,6 +95,9 @@ public class TxHoldemGame extends Game {
     public Card getTable(int i) {
         return table.get(i);
     }
+    public LinkedList<Card> getTable() {
+        return table;
+    }
 
     @Override
     public void continueGame() {
