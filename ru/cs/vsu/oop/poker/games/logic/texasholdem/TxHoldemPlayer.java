@@ -7,7 +7,7 @@ import java.util.LinkedList;
 
 public class TxHoldemPlayer extends Player {
     protected LinkedList<Card> ownHand = new LinkedList<>();
-    public TxHoldemPlayer(double budget, boolean isBot) { super(budget, isBot); }
+    public TxHoldemPlayer(double budget, boolean isBot, String name) { super(budget, isBot, name); }
 
 
     public void findBestHand(LinkedList<Card> table) {
@@ -17,6 +17,7 @@ public class TxHoldemPlayer extends Player {
         SearchResult res = ClassicCombinationsSet.findCombination(cardBuffer);
         hand.setBestHand(res.getBestCombo());
         hand.setRank(res.getRank());
+        hand.setCombinationName(res.getName());
     }
     public void setOwnCard(Card card) {
         ownHand.add(card);

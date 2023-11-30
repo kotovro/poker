@@ -5,8 +5,8 @@ import java.util.Random;
 public class DumbBotOmahaHoldem extends OmahaHoldemPlayer {
     private Random random = new Random();
 
-    public DumbBotOmahaHoldem(double budget) {
-        super(budget, true);
+    public DumbBotOmahaHoldem(double budget, int num) {
+        super(budget, true, "Dumb Omaha bot " + num);
     }
 
     private int makeDecision(double currentGameBet, double wantedBet) {

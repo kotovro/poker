@@ -305,7 +305,7 @@ public class OmahaHoldemForm extends JFrame {
         JDialog dlg = new ContinueGameDialog(a -> {
             game.continueGame();
             startGame();
-        }, game.getWinners(), game.getHumanPlayer(), canContinue, this);
+        }, game.getWinners(), game.getPlayers(), game.getHumanPlayer(), canContinue, this);
         dlg.setVisible(true);
     }
 

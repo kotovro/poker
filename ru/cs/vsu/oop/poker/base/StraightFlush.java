@@ -29,6 +29,9 @@ public class StraightFlush extends AbstractCombination {
             if (card.getSuit().equals(res.getFirst().getSuit())) {
                 if (res.getLast().getCardWeight() == card.getCardWeight() + 1) {
                     res.add(card);
+                    if (res.size() == 5) {
+                        break;
+                    }
                 } else if (res.getLast().getCardWeight() != card.getCardWeight()) {
                     res.clear();
                     res.add(card);

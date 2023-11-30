@@ -22,9 +22,9 @@ public class TxHoldemGame extends Game {
         players = new LinkedList<>();
 
         for (int i = 0; i < numberOfBots; i++) {
-            players.add(new DumbBotTxHoldem(budget));
+            players.add(new DumbBotTxHoldem(budget, i));
         }
-        players.add(new TxHoldemPlayer(budget, false));
+        players.add(new TxHoldemPlayer(budget, false, "Vasya"));
         this.state = PREFLOP;
         this.inStreet = false;
         this.betStep = budget / 100;

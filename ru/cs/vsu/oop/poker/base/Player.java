@@ -16,11 +16,17 @@ public class Player {
     protected UniversalHand hand;
     protected double budget;
     protected double currentBet;
+    protected String name;
+
+    public String getName() {
+        return name;
+    }
 
     protected int lastAction = ACTION_NONE;
-    public Player(double budget, boolean isBot) {
+    public Player(double budget, boolean isBot, String name) {
         this.budget = budget;
         this.isBot = isBot;
+        this.name = name;
     }
 
     public int getLastAction() {

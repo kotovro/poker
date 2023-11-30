@@ -18,6 +18,9 @@ public class Straight extends AbstractCombination {
         for (Card card: hand) {
             if(res.getLast().getCardWeight() == card.getCardWeight() + 1) {
                 res.add(card);
+                if (res.size() == 5) {
+                    break;
+                }
             } else if (res.getLast().getCardWeight() != card.getCardWeight()) {
                 res.clear();
                 res.add(card);

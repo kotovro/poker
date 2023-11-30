@@ -13,14 +13,13 @@ public class Main {
         boolean isDebug = false;
         if(isDebug) {
             LinkedList<Card> buffer = new LinkedList<>();
-            buffer.add(new Card(Card.Suits.SPADES, Card.CardNames.THREE));
-            buffer.add(new Card(Card.Suits.HEARTS, Card.CardNames.THREE));
-            buffer.add(new Card(Card.Suits.HEARTS, Card.CardNames.ACE));
-            buffer.add(new Card(Card.Suits.HEARTS, Card.CardNames.FOUR));
+            buffer.add(new Card(Card.Suits.CROSSES, Card.CardNames.QUEEN));
+            buffer.add(new Card(Card.Suits.CROSSES, Card.CardNames.NINE));
+            buffer.add(new Card(Card.Suits.HEARTS, Card.CardNames.TEN));
+            buffer.add(new Card(Card.Suits.DIAMONDS, Card.CardNames.QUEEN));
             buffer.add(new Card(Card.Suits.HEARTS, Card.CardNames.FIVE));
-            //buffer.add(new Card(Card.Suits.HEARTS, Card.CardNames.TWO));
-            buffer.add(new Card(Card.Suits.SPADES, Card.CardNames.THREE));
-            buffer.add(new Card(Card.Suits.DIAMONDS, Card.CardNames.EIGHT));
+            buffer.add(new Card(Card.Suits.SPADES, Card.CardNames.JACK));
+            buffer.add(new Card(Card.Suits.SPADES, Card.CardNames.EIGHT));
 
 
             SearchResult searchResult = ClassicCombinationsSet.findCombination(buffer);

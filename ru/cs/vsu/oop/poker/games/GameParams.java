@@ -1,7 +1,7 @@
 package ru.cs.vsu.oop.poker.games;
 
 public class GameParams {
-    boolean isXRayEnabled = false;
+    boolean isXRayEnabled = true;
     double budget = 100;
     int botCount = 4;
 

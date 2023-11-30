@@ -7,7 +7,7 @@ import java.util.LinkedList;
 
 public class OmahaHoldemPlayer extends Player {
     protected LinkedList<Card> ownHand = new LinkedList<>();
-    public OmahaHoldemPlayer(double budget, boolean isBot) { super(budget, isBot); }
+    public OmahaHoldemPlayer(double budget, boolean isBot, String name) { super(budget, isBot, name); }
 
 
     public void findBestHand(LinkedList<Card> table) {

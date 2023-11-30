@@ -22,9 +22,9 @@ public class OmahaHoldemGame extends Game {
     public OmahaHoldemGame(int numberOfBots, double budget) {
         players = new LinkedList<>();
         for (int i = 0; i < numberOfBots; i++) {
-            players.add(new DumbBotOmahaHoldem(budget));
+            players.add(new DumbBotOmahaHoldem(budget, i));
         }
-        players.add(new OmahaHoldemPlayer(budget, false));
+        players.add(new OmahaHoldemPlayer(budget, false, "Petya"));
 
         this.state = PREFLOP;
         this.inStreet = false;

@@ -4,8 +4,19 @@ import java.util.LinkedList;
 
 public class UniversalHand implements Comparable<UniversalHand> {
     private LinkedList<Card> bestHand;
-    private String CombinationName;
     private int rank;
+
+    public void setCombinationName(String combinationName) {
+        this.combinationName = combinationName;
+    }
+
+    private String combinationName;
+    public String getCombinationName() {
+        return this.combinationName;
+    }
+
+
+
     public LinkedList<Card> getBestHand() {
         return bestHand;
     }
@@ -22,6 +33,7 @@ public class UniversalHand implements Comparable<UniversalHand> {
     }
 
 
+
     @Override
     public int compareTo(UniversalHand hand) {
         int cmpRes = Integer.compare(this.rank, hand.getRank());
@@ -36,17 +48,4 @@ public class UniversalHand implements Comparable<UniversalHand> {
         }
         return 0;
     }
-    public String getCombinationName() {
-        return CombinationName;
-    }
-    //    public Card[] getActualHand() {
-//        Card[] res = new Card[5];
-//        if (bestHand != null) {
-//            for (int i = 0; i < 5; i++) {
-//                res[i] = this.bestHand.[i];
-//            }
-//            return res;
-//        }
-//        return null;
-//    }
 }

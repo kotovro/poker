@@ -5,8 +5,8 @@ import java.util.Random;
 public class DumbBotTxHoldem extends TxHoldemPlayer {
     private Random random = new Random();
 
-    public DumbBotTxHoldem(double budget) {
-        super(budget, true);
+    public DumbBotTxHoldem(double budget, int num) {
+        super(budget, true, "Dumb Tx Bot " + num);
     }
 
     private int makeDecision(double currentGameBet, double wantedBet) {

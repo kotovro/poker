@@ -154,7 +154,7 @@ public class TxHoldemForm extends JFrame {
         for (Player player: players) {
             if (player.isBot()) {
                 botPanels[i].setVisible(true);
-                names[i].setText("Bot player " + (i + 1));
+                names[i].setText(player.getName());
                 cards1[i].setIcon(getIconForCard(((TxHoldemPlayer)player).getOwnHand(0), params.isXRayEnabled()));
                 cards2[i].setIcon(getIconForCard(((TxHoldemPlayer)player).getOwnHand(1), params.isXRayEnabled()));
             }
@@ -279,7 +279,7 @@ public class TxHoldemForm extends JFrame {
         JDialog dlg = new ContinueGameDialog(a -> {
             game.continueGame();
             startGame();
-        }, game.getWinners(), game.getHumanPlayer(), canContinue, this);
+        }, game.getWinners(), game.getPlayers(), game.getHumanPlayer(), canContinue, this);
         dlg.setVisible(true);
     }
 
