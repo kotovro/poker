@@ -1,7 +1,6 @@
 package ru.cs.vsu.oop.poker.graphics;
 
 import ru.cs.vsu.oop.poker.base.Card;
-import ru.cs.vsu.oop.poker.base.ClassicCombo;
 import ru.cs.vsu.oop.poker.base.Game;
 import ru.cs.vsu.oop.poker.base.Player;
 import ru.cs.vsu.oop.poker.games.GameParams;
@@ -11,6 +10,7 @@ import ru.cs.vsu.oop.poker.games.logic.texasholdem.TxHoldemPlayer;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.util.LinkedList;
 
 import static ru.cs.vsu.oop.poker.graphics.GUIHelper.getIconForCard;
 import static ru.cs.vsu.oop.poker.graphics.GUIHelper.getStatusColor;
@@ -150,15 +150,19 @@ public class TxHoldemForm extends JFrame {
     }
 
     private void startGame() {
-        TxHoldemPlayer[] players = (TxHoldemPlayer[]) game.getPlayers();
+        LinkedList<Player> players = game.getPlayers();
         game.doStep(Game.CONTINUE_BETS);
-        for (int i = 0; i < players.length - 1; i++) {
-            botPanels[i].setVisible(true);
-            names[i].setText("Bot player " + (i + 1));
-            cards1[i].setIcon(getIconForCard(players[i].getOwnHand(0), params.isXRayEnabled()));
-            cards2[i].setIcon(getIconForCard(players[i].getOwnHand(1), params.isXRayEnabled()));
+        int i = 0;
+        for (Player player: players) {
+            if (player.isBot()) {
+                botPanels[i].setVisible(true);
+                names[i].setText("Bot player " + (i + 1));
+                cards1[i].setIcon(getIconForCard(((TxHoldemPlayer)player).getOwnHand(0), params.isXRayEnabled()));
+                cards2[i].setIcon(getIconForCard(((TxHoldemPlayer)player).getOwnHand(1), params.isXRayEnabled()));
+            }
+            i++;
         }
-        hideUnusedBots(players.length);
+        hideUnusedBots(players.size());
         lblHumanCard1.setIcon(getIconForCard(humanPlayer.getOwnHand(0), true));
         lblHumanCard2.setIcon(getIconForCard(humanPlayer.getOwnHand(1), true));
         panelTable.setPreferredSize(new Dimension(800, 800));
@@ -214,13 +218,17 @@ public class TxHoldemForm extends JFrame {
 
 
     public void showGameState() {
-        TxHoldemPlayer[] players = (TxHoldemPlayer[]) game.getPlayers();
-        for (int i = 0; i < players.length - 1; i++) {
-            showPlayerCards(players[i], i);
-            budgets[i].setText("Budget: " + players[i].getBudget());
-            bets[i].setText("Bet: " + players[i].getCurrentBet());
-            states[i].setForeground(getStatusColor(players[i].getLastAction()));
-            states[i].setText("State: " + players[i].getLastActionName());
+        LinkedList<Player> players = game.getPlayers();
+        int i = 0;
+        for (Player player: players) {
+            if (player.isBot()) {
+                showPlayerCards((TxHoldemPlayer) player, i);
+                budgets[i].setText("Budget: " + player.getBudget());
+                bets[i].setText("Bet: " + player.getCurrentBet());
+                states[i].setForeground(getStatusColor(player.getLastAction()));
+                states[i].setText("State: " + player.getLastActionName());
+            }
+            i++;
         }
         showPlayerCards(humanPlayer, cards1.length - 1);
         lblHumanBudget.setText("Your budget: " + humanPlayer.getBudget());
@@ -317,7 +325,7 @@ public class TxHoldemForm extends JFrame {
     }
 
     private void newGame() {
-        game = new TxHoldemGame(params.getBotCount(), params.getBudget(), new ClassicCombo());
+        game = new TxHoldemGame(params.getBotCount(), params.getBudget());
         humanPlayer = (TxHoldemPlayer) game.getHumanPlayer();
         startGame();
     }

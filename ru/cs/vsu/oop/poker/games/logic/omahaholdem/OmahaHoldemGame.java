@@ -1,34 +1,34 @@
 package ru.cs.vsu.oop.poker.games.logic.omahaholdem;
 
 import ru.cs.vsu.oop.poker.base.Card;
-import ru.cs.vsu.oop.poker.base.ClassicCombo;
 import ru.cs.vsu.oop.poker.base.Game;
 import ru.cs.vsu.oop.poker.base.Player;
 
-import java.util.Arrays;
+
+import java.util.LinkedList;
 
 public class OmahaHoldemGame extends Game {
-    private Card[] table = new Card[5];
+    private LinkedList<Card> table = new LinkedList<>();
 
 
 
     private void clearTable() {
-        Arrays.fill(table, null);
+        table.clear();
     }
     private static final int PREFLOP = 0;
     private static final int FLOP = 1;
     private static final int TERN = 2;
     private static final int REAVER = 3;
-    public OmahaHoldemGame(int numberOfBots, double budget, ClassicCombo cd) {
-        players = new OmahaHoldemPlayer[numberOfBots + 1];
-        players[numberOfBots] = new OmahaHoldemPlayer(budget, false);
+    public OmahaHoldemGame(int numberOfBots, double budget) {
+        players = new LinkedList<>();
         for (int i = 0; i < numberOfBots; i++) {
-            players[i] = new DumbBotOmahaHoldem(budget);
+            players.add(new DumbBotOmahaHoldem(budget));
         }
+        players.add(new OmahaHoldemPlayer(budget, false));
+
         this.state = PREFLOP;
         this.inStreet = false;
         this.betStep = budget / 100;
-        this.comboDefinition = cd;
     }
     public void doStep(int humanAction) {
         if (inStreet) {
@@ -45,9 +45,9 @@ public class OmahaHoldemGame extends Game {
         }
         switch (state) {
             case PREFLOP -> {
-                for (OmahaHoldemPlayer player: (OmahaHoldemPlayer[]) this.players) {
+                for (Player player: this.players) {
                     for (int i = 0; i < 4; i++) {
-                        player.setOwnCard(i, deck.drawCard());
+                        ((OmahaHoldemPlayer) player).setOwnCard(deck.drawCard());
                     }
                 }
                 state = FLOP;
@@ -56,20 +56,20 @@ public class OmahaHoldemGame extends Game {
             }
             case FLOP -> {
                 for (int i = 0; i < 3; i++) {
-                    table[i] = deck.drawCard();
+                    table.add(deck.drawCard());
                 }
                 state = TERN;
                 startStreet();
                 doBetRound();
             }
             case TERN -> {
-                table[3] = deck.drawCard();
+                table.add(deck.drawCard());
                 state = REAVER;
                 startStreet();
                 doBetRound();
             }
             case REAVER -> {
-                table[4] = deck.drawCard();
+                table.add(deck.drawCard());
                 state = FINISHED;
                 startStreet();
                 doBetRound();
@@ -77,31 +77,31 @@ public class OmahaHoldemGame extends Game {
             case FINISHED -> {
                 winners = getGameWinners(true);
                 for (Player winner: winners) {
-                    winner.addBudget(bank/ winners.length);
+                    winner.addBudget(bank/ winners.size());
                 }
             }
         }
     }
     @Override
-    protected Player[] getGameWinners(boolean tryGetSingleWinner) {
-        Player[] res = getExclusiveWinner();
+    protected LinkedList<Player> getGameWinners(boolean tryGetSingleWinner) {
+        LinkedList<Player> res = getExclusiveWinner();
         if (res != null) {
             return res;
         }
-        for (OmahaHoldemPlayer player: (OmahaHoldemPlayer[]) players) {
-            player.findBestHand(table, comboDefinition) ;
+        for (Player player: players) {
+            ((OmahaHoldemPlayer)player).findBestHand(table) ;
         }
         return super.getGameWinners(false);
     }
     public Card getTable(int i) {
-        return table[i];
+        return table.get(i);
     }
 
     @Override
     public void continueGame() {
         super.continueGame();
-        for (OmahaHoldemPlayer player: (OmahaHoldemPlayer[]) players) {
-            player.clearOwnHand();
+        for (Player player: players) {
+            ((OmahaHoldemPlayer)player).clearOwnHand();
         }
         clearTable();
         this.state = PREFLOP;

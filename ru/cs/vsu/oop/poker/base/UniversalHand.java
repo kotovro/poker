@@ -1,20 +1,19 @@
 package ru.cs.vsu.oop.poker.base;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedList;
 
 public class UniversalHand implements Comparable<UniversalHand> {
-    private Card[] bestHand;
+    private LinkedList<Card> bestHand;
+    private String CombinationName;
     private int rank;
-    public Card[] getBestHand() {
+    public LinkedList<Card> getBestHand() {
         return bestHand;
     }
     public int getRank() {
         return rank;
     }
 
-    public void setBestHand(Card[] bestHand) {
+    public void setBestHand(LinkedList<Card> bestHand) {
         this.bestHand = bestHand;
     }
 
@@ -30,22 +29,24 @@ public class UniversalHand implements Comparable<UniversalHand> {
             return cmpRes;
         }
         for (int i = 0; i < 5; i++) {
-            cmpRes = Integer.compare(this.bestHand[i].getName().getCardWeight(), hand.getBestHand()[i].getName().getCardWeight());
+            cmpRes = Integer.compare(this.bestHand.get(i).getCardWeight(), hand.getBestHand().get(i).getCardWeight());
             if (cmpRes != 0) {
                 return cmpRes;
             }
         }
         return 0;
     }
-
-    public Card[] getActualHand() {
-        Card[] res = new Card[5];
-        if (bestHand != null) {
-            for (int i = 0; i < 5; i++) {
-                res[i] = this.bestHand[i];
-            }
-            return res;
-        }
-        return null;
+    public String getCombinationName() {
+        return CombinationName;
     }
+    //    public Card[] getActualHand() {
+//        Card[] res = new Card[5];
+//        if (bestHand != null) {
+//            for (int i = 0; i < 5; i++) {
+//                res[i] = this.bestHand.[i];
+//            }
+//            return res;
+//        }
+//        return null;
+//    }
 }

@@ -3,28 +3,23 @@ package ru.cs.vsu.oop.poker.games.logic.texasholdem;
 import ru.cs.vsu.oop.poker.base.*;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 
 public class TxHoldemPlayer extends Player {
-    protected Card[] ownHand = new Card[2];
+    protected LinkedList<Card> ownHand = new LinkedList<>();
     public TxHoldemPlayer(double budget, boolean isBot) { super(budget, isBot); }
 
 
-    public void findBestHand(Card[] table, AbstractCombination cmb) {
-        Card[] cardBuffer = new Card[table.length + ownHand.length];
-        for (int i = 0; i < table.length; i++) {
-            cardBuffer[i] = table[i];
-        }
-        for (int i = table.length; i <  table.length + ownHand.length; i++) {
-            cardBuffer[i] = ownHand[i - table.length];
-
-        }
+    public void findBestHand(LinkedList<Card> table) {
+        LinkedList<Card> cardBuffer = new LinkedList<>(table);
+        cardBuffer.addAll(ownHand);
         hand = new UniversalHand();
-        AbstractCombination.SearchResult res = cmb.findCombination(cardBuffer);
+        SearchResult res = ClassicCombinationsSet.findCombination(cardBuffer);
         hand.setBestHand(res.getBestCombo());
         hand.setRank(res.getRank());
     }
-    public void setOwnCard(int idx, Card card) {
-        ownHand[idx] = card;
+    public void setOwnCard(Card card) {
+        ownHand.add(card);
     }
 
     public boolean isBot() {
@@ -32,10 +27,10 @@ public class TxHoldemPlayer extends Player {
     }
 
     public Card getOwnHand(int i) {
-        return ownHand[i];
+        return ownHand.get(i);
     }
 
     public void clearOwnHand() {
-        Arrays.fill(ownHand, null);
+        ownHand.clear();
     }
 }

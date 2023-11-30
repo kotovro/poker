@@ -1,6 +1,7 @@
 package ru.cs.vsu.oop.poker.base;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class Game {
     public static final int CONTINUE_BETS = 1;
@@ -13,15 +14,14 @@ public class Game {
     protected double currentBet;
     protected int state;
     protected boolean inStreet;
-    protected Player[] winners;
-    protected AbstractCombination comboDefinition;
+    protected LinkedList<Player> winners;
 
 
-    public Player[] getPlayers() {
+    public LinkedList<Player> getPlayers() {
         return players;
     }
 
-    protected Player[] players;
+    protected LinkedList<Player> players;
     protected double betStep = 0;
 
     public Game() {
@@ -39,7 +39,7 @@ public class Game {
     public double getBank() {
         return this.bank;
     }
-    public Player[] getWinners() {
+    public LinkedList<Player> getWinners() {
         return winners;
     }
 
@@ -48,7 +48,7 @@ public class Game {
     }
 
     public Player getHumanPlayer() {
-        return players[players.length - 1];
+        return players.getLast();
     }
     public int getActivePlayersCount() {
         int activePlayers = 0;
@@ -88,7 +88,7 @@ public class Game {
     public void continueGame() {
         this.bank = 0;
         this.deck = new Deck();
-        Player[] currentPlayers = players;
+        LinkedList<Player> currentPlayers = players;
         for (Player player: currentPlayers) {
             if (player.getBudget() == 0) {
                 removePoorPlayer(player);
@@ -101,30 +101,22 @@ public class Game {
     }
 
     private void removePoorPlayer(Player player) {
-        Player[] res = new Player[players.length - 1];
-        int idx = 0;
-        for (Player curPlayer: players) {
-            if (curPlayer != player) {
-                res[idx] = curPlayer;
-                idx++;
-            }
-        }
-        this.players = res;
+        players.remove(player);
     }
     protected int doBetRound() {
 
-        for (int i = 0; i < players.length - 1; i++) {
-            if (players[i].getLastAction() == Player.ACTION_FOLD) {
+        for (Player player: players) {
+            if (player.getLastAction() == Player.ACTION_FOLD) {
                 continue;
             }
-            if (players[i].isBot()) {
-                double bet = players[i].makeBet(currentBet, betStep);
+            if (player.isBot()) {
+                double bet = player.makeBet(currentBet, betStep);
                 if (bet > 0) {
                     bank += bet;
-                    if (players[i].getLastAction() == Player.ACTION_RAISE) {
+                    if (player.getLastAction() == Player.ACTION_RAISE) {
                         currentBet += betStep;
                     }
-                } else if (bet == 0 && players[i].getLastAction() != Player.ACTION_STAY) {
+                } else if (bet == 0 && player.getLastAction() != Player.ACTION_STAY) {
                     stopStreet();
                     return STOP_BETS;
                 } else if (bet < 0 && this.getActivePlayersCount() < 2) {
@@ -135,10 +127,10 @@ public class Game {
         }
         return CONTINUE_BETS;
     }
-    protected Player[] getGameWinners(boolean tryGetSingleWinner) {
-        Player[] player = getExclusiveWinner();
+    protected LinkedList<Player> getGameWinners(boolean tryGetSingleWinner) {
+        LinkedList<Player> player = getExclusiveWinner();
         if (player != null) return player;
-        ArrayList<Player> winners = new ArrayList<>();
+        LinkedList<Player> winners = new LinkedList<>();
         Player winner = null;
         for (Player p: players) {
             if (p.getLastAction() != Player.ACTION_FOLD) {
@@ -150,20 +142,22 @@ public class Game {
                         winners.add(p);
                     } else if (p.getHand().compareTo(winner.getHand()) > 0) {
                         winner = p;
-                        winners = new ArrayList<>();
+                        winners = new LinkedList<>();
                         winners.add(winner);
                     }
                 }
             }
         }
-        return winners.toArray(new Player[1]);
+        return winners;
     }
 
-    protected Player[] getExclusiveWinner() {
+    protected LinkedList<Player> getExclusiveWinner() {
         if (getActivePlayersCount() == 1) {
             for (Player player: players) {
                 if (player.getLastAction() != Player.ACTION_FOLD) {
-                    return new Player[]{player};
+                    LinkedList<Player> res = new LinkedList<>();
+                    res.add(player);
+                    return res;
                 }
             }
         }

@@ -6,6 +6,7 @@ import ru.cs.vsu.oop.poker.base.UniversalHand;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionListener;
+import java.util.LinkedList;
 
 import static ru.cs.vsu.oop.poker.graphics.GUIHelper.getIconForCard;
 
@@ -32,8 +33,8 @@ public class ContinueGameDialog extends JDialog {
     private JLabel[] winnerCards = {lblWHandCard1, lblWHandCard2, lblWHandCard3, lblWHandCard4, lblWHandCard5};
     private JLabel[] yourCards = {lblYHandCard1, lblYHandCard2, lblYHandCard3, lblYHandCard4, lblYHandCard5};
 
-    public ContinueGameDialog(ActionListener actionListener, Player[] winners, Player human, boolean canContinue, JFrame parent)  {
-        Player winner = winners[0];
+    public ContinueGameDialog(ActionListener actionListener, LinkedList<Player> winners, Player human, boolean canContinue, JFrame parent)  {
+        Player winner = winners.getFirst();
         for (Player curWinner: winners) {
             if (curWinner == human) {
                 winner = human;
@@ -85,7 +86,7 @@ public class ContinueGameDialog extends JDialog {
     private void showHand(JLabel[] cards, UniversalHand hand) {
         for(int i = 0; i < 5; i++) {
             cards[i].setText("");
-            cards[i].setIcon(getIconForCard(hand.getActualHand()[i], true));
+            cards[i].setIcon(getIconForCard(hand.getBestHand().get(i), true));
         }
     }
 }

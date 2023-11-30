@@ -70,6 +70,9 @@ public final class Card implements Comparable<Card> {
     public CardNames getName() {
         return name;
     }
+    public int getCardWeight() {
+        return this.getName().getCardWeight();
+    }
 
     public Card(Suits suit, CardNames name) {
         this.suit = suit;

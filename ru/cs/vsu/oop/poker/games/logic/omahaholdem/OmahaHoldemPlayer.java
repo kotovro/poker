@@ -1,31 +1,31 @@
 package ru.cs.vsu.oop.poker.games.logic.omahaholdem;
 
-import ru.cs.vsu.oop.poker.base.AbstractCombination;
-import ru.cs.vsu.oop.poker.base.Card;
-import ru.cs.vsu.oop.poker.base.Player;
-import ru.cs.vsu.oop.poker.base.UniversalHand;
+import ru.cs.vsu.oop.poker.base.*;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 
 public class OmahaHoldemPlayer extends Player {
-    protected Card[] ownHand = new Card[4];
+    protected LinkedList<Card> ownHand = new LinkedList<>();
     public OmahaHoldemPlayer(double budget, boolean isBot) { super(budget, isBot); }
 
 
-    public void findBestHand(Card[] table, AbstractCombination cmb) {
+    public void findBestHand(LinkedList<Card> table) {
         UniversalHand bestHand = null;
-        Card[] cardBuffer = new Card[table.length];
-        for (int i = 0; i < ownHand.length - 1; i++) {
-            for (int j = i + 1; j < ownHand.length; j++) {
-                for (int k = 0; k < table.length - 2; k++) {
-                    for (int l = k + 1; l < table.length - 1; l++) {
-                        for (int m = l + 1; m < table.length; m++) {
-                            cardBuffer[0] = ownHand[i];
-                            cardBuffer[1] = ownHand[j];
-                            cardBuffer[2] = table[k];
-                            cardBuffer[3] = table[l];
-                            cardBuffer[4] = table[m];
-                            AbstractCombination.SearchResult res = cmb.findCombination(cardBuffer);
+        LinkedList<Card> cardBuffer = new LinkedList<Card>();
+        Card[] handBuffer = ownHand.toArray(new Card[0]);
+        Card[] tableBuffer = table.toArray(new Card[0]);
+        for (int i = 0; i < handBuffer.length - 1; i++) {
+            for (int j = i + 1; j < handBuffer.length; j++) {
+                for (int k = 0; k < tableBuffer.length - 2; k++) {
+                    for (int l = k + 1; l < tableBuffer.length - 1; l++) {
+                        for (int m = l + 1; m < tableBuffer.length; m++) {
+                            cardBuffer.add(handBuffer[i]);
+                            cardBuffer.add(handBuffer[j]);
+                            cardBuffer.add(tableBuffer[k]);
+                            cardBuffer.add(tableBuffer[l]);
+                            cardBuffer.add(tableBuffer[m]);
+                            SearchResult res = ClassicCombinationsSet.findCombination(cardBuffer);
 
                             UniversalHand  candidate = new UniversalHand();
                             candidate.setBestHand(res.getBestCombo());
@@ -40,8 +40,8 @@ public class OmahaHoldemPlayer extends Player {
         }
         hand = bestHand;
     }
-    public void setOwnCard(int idx, Card card) {
-        ownHand[idx] = card;
+    public void setOwnCard(Card card) {
+        ownHand.add(card);
     }
 
     public boolean isBot() {
@@ -49,10 +49,10 @@ public class OmahaHoldemPlayer extends Player {
     }
 
     public Card getOwnHand(int i) {
-        return ownHand[i];
+        return ownHand.get(i);
     }
 
     public void clearOwnHand() {
-        Arrays.fill(ownHand, null);
+        ownHand.clear();
     }
 }

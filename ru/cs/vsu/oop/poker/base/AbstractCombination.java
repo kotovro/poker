@@ -1,64 +1,65 @@
 package ru.cs.vsu.oop.poker.base;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
 
-public abstract class AbstractCombination {
-    public class SearchResult {
-        int rank;
-        Card[] bestCombo;
-        String name;
+public abstract class AbstractCombination implements Comparable<AbstractCombination>, ICombinationFinder{
+    protected HashMap<Card.CardNames, Integer> cardsCount = new HashMap<>();
+    protected HashMap<Card.Suits, Integer> suitsCount = new HashMap<>();
+    protected int rank;
 
-        public SearchResult(int rank, Card[] bestCombo, String name) {
-            this.rank = rank;
-            this.bestCombo = bestCombo;
-            this.name = name;
-        }
-
-        public int getRank() {
-            return rank;
-        }
-
-        public Card[] getBestCombo() {
-            return bestCombo;
-        }
-
-        public String getName() {
-            return name;
-        }
+    public AbstractCombination(int rank) {
+        this.rank = rank;
     }
-    protected Map<String, Integer> comboWeight;
-    protected  Map<String, IComboFinder> finder;
-    protected LinkedList<String> comboNames;
+    public abstract String getName();
 
-    public IComboFinder getFinder(String comboName) {
-        if (comboNames.contains(comboName)) {
-            return finder.get(comboName);
-        } else {
-            return null;
-        }
-    }
-    public Integer getRank(String comboName) {
-        if (comboNames.contains(comboName)) {
-            return comboWeight.get(comboName);
-        } else {
-            return null;
-        }
+    @Override
+    public int compareTo(AbstractCombination cmb) {
+        int res = Integer.compare(this.rank, cmb.getRank());
+        return res;
     }
 
-    public SearchResult findCombination(Card[] hand) {
-        Card[] bestCombo = hand;
-        String bestName = "NONE";
-        int bestRank = 0;
-        for (String comboName: this.comboNames) {
-            Card[] candidate = getFinder(comboName).find(hand.clone());
-            if (candidate != null && getRank(comboName) > bestRank) {
-                bestRank = getRank(comboName);
-                bestCombo = candidate;
-                bestName = comboName;
+    protected void createMaps(LinkedList<Card> hand) {
+        for (Card card: hand) {
+            int count = 0;
+            if (cardsCount.containsKey(card.getName())) {
+                count = cardsCount.get(card.getName());
             }
+            cardsCount.put(card.getName(), count + 1);
+            count = 0;
+            if (suitsCount.containsKey(card.getSuit())) {
+                count = suitsCount.get(card.getSuit());
+            }
+            suitsCount.put(card.getSuit(), count + 1);
         }
-        return new SearchResult(bestRank, bestCombo, bestName);
+    }
+    protected LinkedList<Card> getBestNOfAKind(LinkedList<Card> hand, int countN) {
+        createMaps(hand);
+        int firstIndexOf = -1;
+        int i = 0;
+        for (Card card: hand) {
+            if (cardsCount.get(card.getName()) == countN) {
+                firstIndexOf = i;
+                break;
+            }
+            i++;
+        }
+        if (firstIndexOf < 0) {
+            return null;
+        } else {
+            LinkedList<Card> clone = new LinkedList<>();
+            Collections.copy(clone, hand);
+            LinkedList<Card> res = new LinkedList<>();
+            for (i = 0; i < countN; i++) {
+                res.add(clone.remove(firstIndexOf));
+            }
+            res.addAll(clone);
+            return res;
+        }
+    }
+
+    public int getRank() {
+        return rank;
     }
 }
