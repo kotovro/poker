@@ -30,6 +30,9 @@ public class TxHoldemPlayer extends Player {
     public Card getOwnHand(int i) {
         return ownHand.get(i);
     }
+    public LinkedList<Card> getOwnHand() {
+        return ownHand;
+    }
 
     public void clearOwnHand() {
         ownHand.clear();
