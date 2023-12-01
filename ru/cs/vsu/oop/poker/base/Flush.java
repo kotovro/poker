@@ -1,5 +1,6 @@
 package ru.cs.vsu.oop.poker.base;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 
 public class Flush extends AbstractCombination {
@@ -13,7 +14,7 @@ public class Flush extends AbstractCombination {
     }
 
     public LinkedList<Card> find(LinkedList<Card> hand) {
-        createMaps(hand);
+        HashMap<Card.Suits, Integer> suitsCount = createSuitsCountMap(hand);
         Card.Suits suit = null;
         for (Card card: hand) {
             if(suitsCount.get(card.getSuit()) >= 5) {

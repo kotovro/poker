@@ -11,6 +11,9 @@ public class DumbBotTxHoldem extends TxHoldemPlayer {
 
     private int makeDecision(double currentGameBet, double wantedBet) {
         boolean doNotFold = currentGameBet == currentBet;
+        if (!doNotFold) {
+            doNotFold = random.nextInt(0, 5) > 0;
+        }
         if (canRise(currentGameBet, wantedBet)) {
             return random.nextInt(ACTION_CALL, ACTION_FOLD + (doNotFold ? 0 : 1));
         } else if (canRise(currentGameBet, 0) && (doNotFold || random.nextInt(0, 2) > 0)) {

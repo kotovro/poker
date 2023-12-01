@@ -5,8 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 public abstract class AbstractCombination implements Comparable<AbstractCombination>, ICombinationFinder{
-    protected HashMap<Card.CardNames, Integer> cardsCount;
-    protected HashMap<Card.Suits, Integer> suitsCount;
+
     protected int rank;
 
     public AbstractCombination(int rank) {
@@ -20,24 +19,30 @@ public abstract class AbstractCombination implements Comparable<AbstractCombinat
         return res;
     }
 
-    protected void createMaps(LinkedList<Card> hand) {
-        suitsCount = new HashMap<>();
-        cardsCount = new HashMap<>();
-        for (Card card: hand) {
+    protected HashMap<Card.CardNames, Integer> createCardsCountMap(LinkedList<Card> hand) {
+        HashMap<Card.CardNames, Integer> cardsCount = new HashMap<>();
+        for (Card card : hand) {
             int count = 0;
             if (cardsCount.containsKey(card.getName())) {
                 count = cardsCount.get(card.getName());
             }
             cardsCount.put(card.getName(), count + 1);
-            count = 0;
+        }
+        return cardsCount;
+    }
+    protected HashMap<Card.Suits, Integer> createSuitsCountMap(LinkedList<Card> hand) {
+        HashMap<Card.Suits, Integer> suitsCount = new HashMap<>();
+        for (Card card : hand) {
+            int count = 0;
             if (suitsCount.containsKey(card.getSuit())) {
                 count = suitsCount.get(card.getSuit());
             }
             suitsCount.put(card.getSuit(), count + 1);
         }
+        return suitsCount;
     }
     protected LinkedList<Card> getBestNOfAKind(LinkedList<Card> hand, int countN) {
-        createMaps(hand);
+        HashMap<Card.CardNames, Integer> cardsCount = createCardsCountMap(hand);
         int firstIndexOf = -1;
         int i = 0;
         for (Card card: hand) {

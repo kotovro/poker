@@ -1,6 +1,7 @@
 package ru.cs.vsu.oop.poker.base;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 public class FullHouse extends AbstractCombination {
@@ -14,7 +15,7 @@ public class FullHouse extends AbstractCombination {
     }
 
     public LinkedList<Card> find(LinkedList<Card> hand) {
-        createMaps(hand);
+        HashMap<Card.CardNames, Integer> cardsCount = createCardsCountMap(hand);
         int firstIndexOf = -1;
         int i = 0;
         for (Card card : hand) {

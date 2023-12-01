@@ -1,5 +1,6 @@
 package ru.cs.vsu.oop.poker.base;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -14,7 +15,7 @@ public class StraightFlush extends AbstractCombination {
     }
 
     public LinkedList<Card> find(LinkedList<Card> hand) {
-        createMaps(hand);
+        HashMap<Card.Suits, Integer> suitsCount = createSuitsCountMap(hand);
         LinkedList<Card> res = new LinkedList<>();
         for (Card card: hand) {
             if(suitsCount.get(card.getSuit()) > 4) {
