@@ -1,7 +1,7 @@
 package ru.cs.vsu.oop.poker;
 
 import ru.cs.vsu.oop.poker.base.Card;
-import ru.cs.vsu.oop.poker.base.ClassicCombinationsSet;
+import ru.cs.vsu.oop.poker.base.CombinationsSet;
 import ru.cs.vsu.oop.poker.base.SearchResult;
 import ru.cs.vsu.oop.poker.graphics.TxHoldemForm;
 
@@ -22,7 +22,7 @@ public class Main {
             buffer.add(new Card(Card.Suits.SPADES, Card.CardNames.EIGHT));
 
 
-            SearchResult searchResult = ClassicCombinationsSet.findCombination(buffer);
+            SearchResult searchResult = CombinationsSet.findCombination(buffer);
             System.out.println(searchResult.getName());
             for (Card c: searchResult.getBestCombo()) {
                 System.out.println(c.getName().name() + " " + c.getSuit().name()) ;

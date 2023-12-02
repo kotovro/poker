@@ -1,10 +1,9 @@
 package ru.cs.vsu.oop.poker.base;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 
-public enum ClassicCombinationsSet {
+public enum CombinationsSet {
     BEST_CARD(new BestCard(0)),
     PAIR(new Pair(1)),
     TWO_PAIR(new TwoPairs(2)),
@@ -15,7 +14,7 @@ public enum ClassicCombinationsSet {
     FOUR_OF_A_KIND(new FourOfAKind(7)),
     STRAIGHT_FLUSH(new StraightFlush(8));
     private final AbstractCombination combination;
-    ClassicCombinationsSet(AbstractCombination combination) {
+    CombinationsSet(AbstractCombination combination) {
         this.combination = combination;
     }
     public static SearchResult findCombination(LinkedList<Card> hand) {
@@ -26,7 +25,7 @@ public enum ClassicCombinationsSet {
         String bestName = BEST_CARD.combination.getName();
         int bestRank = BEST_CARD.combination.getRank();
 
-        for (ClassicCombinationsSet cmb: ClassicCombinationsSet.values()) {
+        for (CombinationsSet cmb: CombinationsSet.values()) {
             LinkedList<Card> candidate = cmb.combination.find(clone);
             if (candidate != null && cmb.combination.getRank() > bestRank) {
                 bestRank = cmb.combination.getRank();

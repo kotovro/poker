@@ -2,6 +2,7 @@ package ru.cs.vsu.oop.poker.base;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.stream.Collectors;
 
 public class Game {
     public static final int CONTINUE_BETS = 1;
@@ -88,16 +89,14 @@ public class Game {
     public void continueGame() {
         this.bank = 0;
         this.deck = new Deck();
-        LinkedList<Player> currentPlayers = players;
-        for (Player player: currentPlayers) {
-            if (player.getBudget() == 0) {
-                removePoorPlayer(player);
-            } else {
-                player.setLastAction(Player.ACTION_NONE);
-                player.clearCurrentBet();
-                player.clearHand();
-            }
-        }
+        this.players = this.players.stream()
+                .filter(p -> p.getBudget() >= this.betStep)
+                .collect(Collectors.toCollection(LinkedList::new));
+        this.players.forEach(p -> {
+            p.setLastAction(Player.ACTION_NONE);
+            p.clearCurrentBet();
+            p.clearHand();
+        });
     }
 
     private void removePoorPlayer(Player player) {

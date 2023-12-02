@@ -2,7 +2,6 @@ package ru.cs.vsu.oop.poker.games.logic.texasholdem;
 
 import ru.cs.vsu.oop.poker.base.*;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 
 public class TxHoldemPlayer extends Player {
@@ -14,7 +13,7 @@ public class TxHoldemPlayer extends Player {
         LinkedList<Card> cardBuffer = new LinkedList<>(table);
         cardBuffer.addAll(ownHand);
         hand = new UniversalHand();
-        SearchResult res = ClassicCombinationsSet.findCombination(cardBuffer);
+        SearchResult res = CombinationsSet.findCombination(cardBuffer);
         hand.setBestHand(res.getBestCombo());
         hand.setRank(res.getRank());
         hand.setCombinationName(res.getName());

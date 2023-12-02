@@ -163,7 +163,7 @@ public class TxHoldemForm extends JFrame {
         hideUnusedBots(players.size());
         lblHumanCard1.setIcon(getIconForCard(humanPlayer.getOwnHand(0), true));
         lblHumanCard2.setIcon(getIconForCard(humanPlayer.getOwnHand(1), true));
-        panelTable.setPreferredSize(new Dimension(800, 800));
+        panelTable.setPreferredSize(new Dimension(900, 900));
         showGameState();
     }
 
@@ -221,19 +221,19 @@ public class TxHoldemForm extends JFrame {
         for (Player player: players) {
             if (player.isBot()) {
                 showPlayerCards((TxHoldemPlayer) player, i);
-                budgets[i].setText("Budget: " + player.getBudget());
-                bets[i].setText("Bet: " + player.getCurrentBet());
+                budgets[i].setText("Budget: " + String.format("%.2f", player.getBudget()));
+                bets[i].setText("Bet: " + String.format("%.2f", player.getCurrentBet()));
                 states[i].setForeground(getStatusColor(player.getLastAction()));
                 states[i].setText("State: " + player.getLastActionName());
             }
             i++;
         }
         showPlayerCards(humanPlayer, cards1.length - 1);
-        lblHumanBudget.setText("Your budget: " + humanPlayer.getBudget());
-        lblHumanBet.setText("Your bet: " + humanPlayer.getCurrentBet());
+        lblHumanBudget.setText("Your budget: " + String.format("%.2f", humanPlayer.getBudget()));
+        lblHumanBet.setText("Your bet: " + String.format("%.2f", humanPlayer.getCurrentBet()));
         lblHumanState.setForeground(getStatusColor(humanPlayer.getLastAction()));
         lblHumanState.setText("Your last action: " + humanPlayer.getLastActionName());
-        lblBank.setText("Bank: " + game.getBank());
+        lblBank.setText("Bank: " + String.format("%.2f", game.getBank()));
         showTable();
         if (game.getState() == Game.FINISHED) {
             btnFold.setEnabled(false);
