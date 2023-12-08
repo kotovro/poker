@@ -27,6 +27,7 @@ public class TxHoldemGame extends Game {
         for (int i = 0; i < numberOfBots; i++) {
             players.add(new DumbBotTxHoldem(budget, i));
         }
+
         players.add(new TxHoldemPlayer(budget, false, "Vasya"));
         this.state = PREFLOP;
         this.inStreet = false;

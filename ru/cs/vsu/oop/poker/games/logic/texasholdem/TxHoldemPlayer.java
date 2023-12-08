@@ -13,7 +13,7 @@ public class TxHoldemPlayer extends Player {
         LinkedList<Card> cardBuffer = new LinkedList<>(table);
         cardBuffer.addAll(ownHand);
         hand = new UniversalHand();
-        SearchResult res = CombinationsSet.findCombination(cardBuffer);
+        SearchResult res = ClassicCombinationsSet.findCombination(cardBuffer);
         hand.setBestHand(res.getBestCombo());
         hand.setRank(res.getRank());
         hand.setCombinationName(res.getName());

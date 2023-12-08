@@ -6,6 +6,9 @@ import java.util.stream.Collectors;
 public abstract class AbstractCombination implements Comparable<AbstractCombination>, ICombinationFinder{
 
     protected int rank;
+    public int getRank() {
+        return rank;
+    }
 
     public AbstractCombination(int rank) {
         this.rank = rank;
@@ -45,10 +48,5 @@ public abstract class AbstractCombination implements Comparable<AbstractCombinat
         clone.removeAll(res);
         res.addAll(clone);
         return res;
-    }
-
-
-    public int getRank() {
-        return rank;
     }
 }

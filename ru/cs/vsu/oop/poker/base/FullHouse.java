@@ -1,9 +1,7 @@
 package ru.cs.vsu.oop.poker.base;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class FullHouse extends AbstractCombination {
     public FullHouse(int rank) {
@@ -17,38 +15,33 @@ public class FullHouse extends AbstractCombination {
 
     public LinkedList<Card> find(LinkedList<Card> hand) {
         Map<Card.CardNames, Long> cardsCount = createCardsCountMap(hand);
-        int firstIndexOf = -1;
-        int i = 0;
-        for (Card card : hand) {
-            if (cardsCount.get(card.getName()) == 3) {
-                firstIndexOf = i;
-                break;
-            }
-            i++;
-        }
-        if (firstIndexOf < 0) {
+        Optional<Card> card = hand
+                .stream()
+                .filter(c -> cardsCount.get(c.getName()) == 3)
+                .findFirst();
+        if (card.isEmpty()) {
             return null;
         }
         LinkedList<Card> clone = new LinkedList<>(hand);
-        LinkedList<Card> res = new LinkedList<>();
-        for (i = 0; i < 3; i++) {
-            res.add(clone.remove(firstIndexOf));
-        }
-        i = 0;
-        firstIndexOf = -1;
-        for (Card card : clone) {
-            if (cardsCount.get(card.getName()) > 1) {
-                firstIndexOf = i;
-                break;
-            }
-            i++;
-        }
-        if (firstIndexOf < 0) {
+        LinkedList<Card> res = clone
+                .stream()
+                .filter(c -> c.getName().equals(card.get().getName()))
+                .collect(Collectors.toCollection(LinkedList::new));
+        clone.removeAll(res);
+
+        Optional<Card> secondCard = clone
+                .stream()
+                .filter(c -> cardsCount.get(c.getName()) >= 2)
+                .findFirst();
+        if (secondCard.isEmpty()) {
             return null;
         }
-        for (i = 0; i < 2; i++) {
-            res.add(clone.remove(firstIndexOf));
-        }
+        res.addAll(clone
+                .stream()
+                .filter(c -> c.getName().equals(secondCard.get().getName()))
+                .limit(2)
+                .collect(Collectors.toCollection(LinkedList::new)));
+        clone.removeAll(res);
         res.addAll(clone);
         return res;
     }

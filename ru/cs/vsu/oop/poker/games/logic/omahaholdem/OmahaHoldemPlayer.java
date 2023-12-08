@@ -24,7 +24,7 @@ public class OmahaHoldemPlayer extends Player {
                             cardBuffer.add(tableBuffer[k]);
                             cardBuffer.add(tableBuffer[l]);
                             cardBuffer.add(tableBuffer[m]);
-                            SearchResult res = CombinationsSet.findCombination(cardBuffer);
+                            SearchResult res = ClassicCombinationsSet.findCombination(cardBuffer);
 
                             UniversalHand  candidate = new UniversalHand();
                             candidate.setBestHand(res.getBestCombo());

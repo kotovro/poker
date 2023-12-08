@@ -52,13 +52,10 @@ public class Game {
         return players.getLast();
     }
     public int getActivePlayersCount() {
-        int activePlayers = 0;
-        for (Player p : players) {
-            if (p.getLastAction() != Player.ACTION_FOLD) {
-                activePlayers++;
-            }
-        }
-        return activePlayers;
+        return (int) players
+                .stream()
+                .filter(p -> p.getLastAction() != Player.ACTION_FOLD)
+                .count();
     }
 
     protected void startStreet() {
@@ -67,12 +64,12 @@ public class Game {
     protected void stopStreet() {
         inStreet = false;
         currentBet = 0;
-        for (Player p: players) {
+        players.forEach(p -> {
             p.clearCurrentBet();
             if (p.getLastAction() != Player.ACTION_FOLD) {
                 p.setLastAction(Player.ACTION_NONE);
             }
-        }
+        });
     }
 
     public double getBetStep() {
@@ -129,6 +126,7 @@ public class Game {
     protected LinkedList<Player> getGameWinners(boolean tryGetSingleWinner) {
         LinkedList<Player> player = getExclusiveWinner();
         if (player != null) return player;
+
         LinkedList<Player> winners = new LinkedList<>();
         Player winner = null;
         for (Player p: players) {
@@ -152,13 +150,10 @@ public class Game {
 
     protected LinkedList<Player> getExclusiveWinner() {
         if (getActivePlayersCount() == 1) {
-            for (Player player: players) {
-                if (player.getLastAction() != Player.ACTION_FOLD) {
-                    LinkedList<Player> res = new LinkedList<>();
-                    res.add(player);
-                    return res;
-                }
-            }
+            return players
+                    .stream()
+                    .filter(p -> p.getLastAction() != Player.ACTION_FOLD)
+                    .collect(Collectors.toCollection(LinkedList::new));
         }
         return null;
     }

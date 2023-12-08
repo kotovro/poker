@@ -3,6 +3,7 @@ package ru.cs.vsu.oop.poker.base;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class StraightFlush extends AbstractCombination {
     public StraightFlush(int rank) {
@@ -16,17 +17,15 @@ public class StraightFlush extends AbstractCombination {
 
     public LinkedList<Card> find(LinkedList<Card> hand) {
         Map<Card.Suits, Long> suitsCount = createSuitsCountMap(hand);
-        LinkedList<Card> res = new LinkedList<>();
-        for (Card card: hand) {
-            if(suitsCount.get(card.getSuit()) > 4) {
-                res.add(card);
-                break;
-            }
-        }
+        LinkedList<Card> res = hand
+                .stream()
+                .filter(card -> suitsCount.get(card.getSuit()) > 4)
+                .collect(Collectors.toCollection(LinkedList::new));
         if (res.size() == 0) {
             return null;
         }
-        for (Card card: hand) {
+
+        for (Card card : hand) {
             if (card.getSuit().equals(res.getFirst().getSuit())) {
                 if (res.getLast().getCardWeight() == card.getCardWeight() + 1) {
                     res.add(card);
@@ -39,7 +38,7 @@ public class StraightFlush extends AbstractCombination {
                 }
             }
         }
-        if(res.size() == 4 && res.getFirst().getName() == Card.CardNames.FIVE && hand.getFirst().getName() == Card.CardNames.ACE) {
+        if (res.size() == 4 && res.getFirst().getName() == Card.CardNames.FIVE && hand.getFirst().getName() == Card.CardNames.ACE) {
             Iterator<Card> iterator = hand.iterator();
             while (iterator.hasNext()) {
                 Card curCard = iterator.next();
@@ -56,11 +55,11 @@ public class StraightFlush extends AbstractCombination {
         if (res.size() < 5) {
             return null;
         }
-        for (Card card: hand) {
-            if (!res.contains(card)) {
-                res.add(card);
+        hand.forEach(c -> {
+            if (!res.contains(c)) {
+                res.add(c);
             }
-        }
+        });
         return res;
     }
 }

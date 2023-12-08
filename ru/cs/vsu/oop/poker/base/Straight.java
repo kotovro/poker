@@ -33,11 +33,11 @@ public class Straight extends AbstractCombination {
         if (res.size() < 5) {
             return null;
         }
-        for (Card card: hand) {
-            if (!res.contains(card)) {
-                res.add(card);
+        hand.forEach(c -> {
+            if (!res.contains(c)) {
+                res.add(c);
             }
-        }
+        });
         return res;
     }
 }
