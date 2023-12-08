@@ -3,6 +3,7 @@ package ru.cs.vsu.oop.poker.base;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 public class TwoPairs extends AbstractCombination {
     public TwoPairs(int rank) {
@@ -15,7 +16,7 @@ public class TwoPairs extends AbstractCombination {
     }
 
     public LinkedList<Card> find(LinkedList<Card> hand) {
-        HashMap<Card.CardNames, Integer> cardsCount = createCardsCountMap(hand);
+        Map<Card.CardNames, Long> cardsCount = createCardsCountMap(hand);
         int firstIndexOf = -1;
         int i = 0;
         for (Card card : hand) {

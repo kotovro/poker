@@ -3,6 +3,8 @@ package ru.cs.vsu.oop.poker.base;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public abstract class AbstractCombination implements Comparable<AbstractCombination>, ICombinationFinder{
 
@@ -19,30 +21,18 @@ public abstract class AbstractCombination implements Comparable<AbstractCombinat
         return res;
     }
 
-    protected HashMap<Card.CardNames, Integer> createCardsCountMap(LinkedList<Card> hand) {
-        HashMap<Card.CardNames, Integer> cardsCount = new HashMap<>();
-        for (Card card : hand) {
-            int count = 0;
-            if (cardsCount.containsKey(card.getName())) {
-                count = cardsCount.get(card.getName());
-            }
-            cardsCount.put(card.getName(), count + 1);
-        }
-        return cardsCount;
+    protected Map<Card.CardNames, Long> createCardsCountMap(LinkedList<Card> hand) {
+        return hand.stream()
+                .collect(Collectors.groupingBy(Card::getName,
+                        Collectors.counting()));
     }
-    protected HashMap<Card.Suits, Integer> createSuitsCountMap(LinkedList<Card> hand) {
-        HashMap<Card.Suits, Integer> suitsCount = new HashMap<>();
-        for (Card card : hand) {
-            int count = 0;
-            if (suitsCount.containsKey(card.getSuit())) {
-                count = suitsCount.get(card.getSuit());
-            }
-            suitsCount.put(card.getSuit(), count + 1);
-        }
-        return suitsCount;
+    protected Map<Card.Suits, Long> createSuitsCountMap(LinkedList<Card> hand) {
+        return hand.stream()
+                .collect(Collectors.groupingBy(Card::getSuit,
+                        Collectors.counting()));
     }
     protected LinkedList<Card> getBestNOfAKind(LinkedList<Card> hand, int countN) {
-        HashMap<Card.CardNames, Integer> cardsCount = createCardsCountMap(hand);
+        Map<Card.CardNames, Long> cardsCount = createCardsCountMap(hand);
         int firstIndexOf = -1;
         int i = 0;
         for (Card card: hand) {
