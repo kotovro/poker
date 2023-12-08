@@ -1,9 +1,6 @@
 package ru.cs.vsu.oop.poker.base;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class AbstractCombination implements Comparable<AbstractCombination>, ICombinationFinder{
@@ -33,27 +30,23 @@ public abstract class AbstractCombination implements Comparable<AbstractCombinat
     }
     protected LinkedList<Card> getBestNOfAKind(LinkedList<Card> hand, int countN) {
         Map<Card.CardNames, Long> cardsCount = createCardsCountMap(hand);
-        int firstIndexOf = -1;
-        int i = 0;
-        for (Card card: hand) {
-            if (cardsCount.get(card.getName()) == countN) {
-                firstIndexOf = i;
-                break;
-            }
-            i++;
-        }
-        if (firstIndexOf < 0) {
+        Optional<Card> card = hand.stream()
+                .filter(c -> cardsCount.get(c.getName()) == countN)
+                .findFirst();
+
+        if (card.isEmpty()) {
             return null;
-        } else {
-            LinkedList<Card> clone = new LinkedList<>(hand);
-            LinkedList<Card> res = new LinkedList<>();
-            for (i = 0; i < countN; i++) {
-                res.add(clone.remove(firstIndexOf));
-            }
-            res.addAll(clone);
-            return res;
         }
+
+        LinkedList<Card> clone = new LinkedList<>(hand);
+        LinkedList<Card> res = clone.stream()
+                .filter(c -> c.getName().equals(card.get().getName()))
+                .collect(Collectors.toCollection(LinkedList::new));
+        clone.removeAll(res);
+        res.addAll(clone);
+        return res;
     }
+
 
     public int getRank() {
         return rank;
