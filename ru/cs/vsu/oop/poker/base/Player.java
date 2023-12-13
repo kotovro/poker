@@ -1,7 +1,7 @@
 package ru.cs.vsu.oop.poker.base;
 
 
-public class Player {
+public class Player implements Cloneable {
     public final static int ACTION_NONE = 0;
     public final static int ACTION_STAY = 1;
     public final static int ACTION_CALL = 2;
@@ -9,26 +9,24 @@ public class Player {
     public final static int ACTION_FOLD = 4;
     protected final boolean isBot;
 
-    public UniversalHand getHand() {
-        return hand;
-    }
+
 
     protected UniversalHand hand;
     protected double budget;
     protected double currentBet;
     protected String name;
-
-    public String getName() {
-        return name;
-    }
-
     protected int lastAction = ACTION_NONE;
     public Player(double budget, boolean isBot, String name) {
         this.budget = budget;
         this.isBot = isBot;
         this.name = name;
     }
-
+    public String getName() {
+        return name;
+    }
+    public UniversalHand getHand() {
+        return hand;
+    }
     public int getLastAction() {
         return lastAction;
     }
@@ -96,4 +94,14 @@ public class Player {
         this.hand = null;
     }
 
+    @Override
+    public Player clone() {
+        try {
+            Player clone = (Player) super.clone();
+            clone.hand = this.hand.clone();
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
 }

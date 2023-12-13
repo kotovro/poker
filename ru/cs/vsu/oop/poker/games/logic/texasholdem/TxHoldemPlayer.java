@@ -1,13 +1,12 @@
 package ru.cs.vsu.oop.poker.games.logic.texasholdem;
 
 import ru.cs.vsu.oop.poker.base.*;
-import ru.cs.vsu.oop.poker.base.combinations.AbstractCombination;
 import ru.cs.vsu.oop.poker.base.combinations.ClassicCombinationsSet;
 import ru.cs.vsu.oop.poker.base.combinations.SearchResultFactory;
 
 import java.util.LinkedList;
 
-public class TxHoldemPlayer extends Player {
+public class TxHoldemPlayer extends Player implements Cloneable {
     protected LinkedList<Card> ownHand = new LinkedList<>();
     public TxHoldemPlayer(double budget, boolean isBot, String name) { super(budget, isBot, name); }
 
@@ -38,5 +37,12 @@ public class TxHoldemPlayer extends Player {
 
     public void clearOwnHand() {
         ownHand.clear();
+    }
+
+    @Override
+    public TxHoldemPlayer clone() {
+        TxHoldemPlayer clone = (TxHoldemPlayer) super.clone();
+        clone.ownHand = (LinkedList<Card>) this.ownHand.clone();
+        return clone;
     }
 }

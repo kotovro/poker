@@ -8,13 +8,8 @@ import ru.cs.vsu.oop.poker.base.Player;
 import javax.swing.*;
 import java.util.LinkedList;
 
-public class TxHoldemGame extends Game {
+public class TxHoldemGame extends Game implements Cloneable {
     private LinkedList<Card> table = new LinkedList<>();
-
-
-    private void clearTable() {
-        table.clear();
-    }
 
     private static final int PREFLOP = 0;
     private static final int FLOP = 1;
@@ -33,16 +28,20 @@ public class TxHoldemGame extends Game {
         this.inStreet = false;
         this.betStep = budget / 100;
     }
-
-    public void doStep(int humanAction) {
+    private void clearTable() {
+        table.clear();
+    }
+    public LinkedList<Game> doStep(int humanAction) {
         DebugLogger.log(DebugLogger.LogLevel.DEBUG, getDebugMessage());
+        LinkedList<Game> gameStates = new LinkedList<>();
         if (inStreet) {
             if (humanAction == STOP_BETS) {
+                gameStates.add(this.clone());
                 stopStreet();
             } else {
-                int result = doBetRound();
+                int result = doBetRound(gameStates);
                 if (result == CONTINUE_BETS) {
-                    return;
+                    return gameStates;
                 } else if (result == FINISH_GAME) {
                     state = FINISHED;
                 }
@@ -57,7 +56,7 @@ public class TxHoldemGame extends Game {
                 }
                 state = FLOP;
                 startStreet();
-                doBetRound();
+                doBetRound(gameStates);
             }
             case FLOP -> {
                 for (int i = 0; i < 3; i++) {
@@ -65,19 +64,19 @@ public class TxHoldemGame extends Game {
                 }
                 state = TERN;
                 startStreet();
-                doBetRound();
+                doBetRound(gameStates);
             }
             case TERN -> {
                 table.add(deck.drawCard());
                 state = REAVER;
                 startStreet();
-                doBetRound();
+                doBetRound(gameStates);
             }
             case REAVER -> {
                 table.add(deck.drawCard());
                 state = FINISHED;
                 startStreet();
-                doBetRound();
+                doBetRound(gameStates);
             }
             case FINISHED -> {
                 winners = getGameWinners(true);
@@ -87,6 +86,7 @@ public class TxHoldemGame extends Game {
                 DebugLogger.log(DebugLogger.LogLevel.DEBUG, getGameEndMessage());
             }
         }
+        return gameStates;
     }
 
     @Override
@@ -100,11 +100,6 @@ public class TxHoldemGame extends Game {
         }
         return super.getGameWinners(false);
     }
-
-    public Card getTable(int i) {
-        return table.get(i);
-    }
-
     public LinkedList<Card> getTable() {
         return table;
     }
@@ -174,5 +169,12 @@ public class TxHoldemGame extends Game {
 
         }
         return sb.toString();
+    }
+
+    @Override
+    public TxHoldemGame clone() {
+        TxHoldemGame clone = (TxHoldemGame) super.clone();
+        clone.table = (LinkedList<Card>) this.table.clone();
+        return clone;
     }
 }

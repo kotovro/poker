@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
 
-public class Game {
+public class Game implements Cloneable {
     public static final int CONTINUE_BETS = 1;
     public static final int STOP_BETS = 0;
     public static final int FINISH_GAME = -1;
@@ -16,18 +16,15 @@ public class Game {
     protected int state;
     protected boolean inStreet;
     protected LinkedList<Player> winners;
-
-
-    public LinkedList<Player> getPlayers() {
-        return players;
-    }
-
     protected LinkedList<Player> players;
     protected double betStep = 0;
+    private int curBotIdx = 0;
+
 
     public Game() {
         this.bank = 0;
         this.deck = new Deck();
+        this.deck.shuffle();
     }
     public int getState() {
         if (!inStreet) {
@@ -36,7 +33,9 @@ public class Game {
             return IN_STREET;
         }
     }
-
+    public LinkedList<Player> getPlayers() {
+        return players;
+    }
     public double getBank() {
         return this.bank;
     }
@@ -99,13 +98,20 @@ public class Game {
     private void removePoorPlayer(Player player) {
         players.remove(player);
     }
-    protected int doBetRound() {
+    protected int doBetRound(LinkedList<Game> gameStates) {
 
+        int i = 0;
         for (Player player: players) {
-            if (player.getLastAction() == Player.ACTION_FOLD) {
+            if (player.getLastAction() == Player.ACTION_FOLD || curBotIdx > i) {
+                if (curBotIdx <= i) {
+                    curBotIdx++;
+                }
+                i++;
                 continue;
             }
-            if (player.isBot()) {
+            if (player.isBot() && curBotIdx <= i) {
+                gameStates.add(this.clone());
+                curBotIdx++;
                 double bet = player.makeBet(currentBet, betStep);
                 if (bet > 0) {
                     bank += bet;
@@ -120,7 +126,9 @@ public class Game {
                     return FINISH_GAME;
                 }
             }
+            i++;
         }
+        curBotIdx = 0;
         return CONTINUE_BETS;
     }
     protected LinkedList<Player> getGameWinners(boolean tryGetSingleWinner) {
@@ -158,4 +166,15 @@ public class Game {
         return null;
     }
 
+    @Override
+    public Game clone() {
+        try {
+            Game clone = (Game) super.clone();
+            clone.deck = this.deck.clone();
+            clone.players = this.players.stream().map(p -> p.clone()).collect(Collectors.toCollection(LinkedList::new));
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
 }

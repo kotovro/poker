@@ -11,6 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
+import java.util.Stack;
 
 import static ru.cs.vsu.oop.poker.graphics.GUIHelper.getIconForCard;
 import static ru.cs.vsu.oop.poker.graphics.GUIHelper.getStatusColor;
@@ -105,33 +106,39 @@ public class TxHoldemForm extends JFrame {
 
     public TxHoldemForm() {
         initControls();
+        Stack<Game> gameStack = new Stack<>();
+
         btnFold.addActionListener(e -> {
             humanPlayer.setLastAction(Player.ACTION_FOLD);
             while (game.getState() != Game.FINISHED) {
-                game.doStep(Game.CONTINUE_BETS);
+                gameStack.addAll(game.doStep(Game.CONTINUE_BETS));
             }
             showGameState();
         });
         btnRaise.addActionListener(e -> {
+            gameStack.push(game.clone());
             double bet = humanPlayer.makeBet(game.getCurrentBet(), game.getBetStep());
             game.addToBank(bet);
             game.addToCurrentBet(game.getBetStep());
-            game.doStep(Game.CONTINUE_BETS);
+            gameStack.addAll(game.doStep(Game.CONTINUE_BETS));
             showGameState();
         });
         btnCall.addActionListener(e -> {
+            gameStack.push(game.clone());
             double bet = humanPlayer.makeBet(game.getCurrentBet(), 0);
             if (bet == 0) {
-                game.doStep(Game.STOP_BETS);
+                gameStack.addAll(game.doStep(Game.STOP_BETS));
             } else {
                 game.addToBank(bet);
-                game.doStep(Game.CONTINUE_BETS);
+                gameStack.addAll(game.doStep(Game.CONTINUE_BETS));
             }
             showGameState();
         });
+
         btnStay.addActionListener(e -> {
+            gameStack.push(game.clone());
             humanPlayer.setLastAction(Player.ACTION_STAY);
-            game.doStep(Game.CONTINUE_BETS);
+            gameStack.addAll(game.doStep(Game.CONTINUE_BETS));
             showGameState();
         });
         this.setTitle("Texas hold'em poker game");
