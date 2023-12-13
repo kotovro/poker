@@ -1,6 +1,9 @@
 package ru.cs.vsu.oop.poker.games.logic.omahaholdem;
 
 import ru.cs.vsu.oop.poker.base.*;
+import ru.cs.vsu.oop.poker.base.combinations.AbstractCombination;
+import ru.cs.vsu.oop.poker.base.combinations.ClassicCombinationsSet;
+import ru.cs.vsu.oop.poker.base.combinations.SearchResultFactory;
 
 import java.util.LinkedList;
 
@@ -24,7 +27,7 @@ public class OmahaHoldemPlayer extends Player {
                             cardBuffer.add(tableBuffer[k]);
                             cardBuffer.add(tableBuffer[l]);
                             cardBuffer.add(tableBuffer[m]);
-                            SearchResult res = ClassicCombinationsSet.findCombination(cardBuffer);
+                            SearchResult res = SearchResultFactory.getSearchResult(cardBuffer, ClassicCombinationsSet.class);
 
                             UniversalHand  candidate = new UniversalHand();
                             candidate.setBestHand(res.getBestCombo());

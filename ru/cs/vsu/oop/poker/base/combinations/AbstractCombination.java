@@ -1,9 +1,12 @@
-package ru.cs.vsu.oop.poker.base;
+package ru.cs.vsu.oop.poker.base.combinations;
+
+import ru.cs.vsu.oop.poker.base.Card;
+
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public abstract class AbstractCombination implements Comparable<AbstractCombination>, ICombinationFinder{
+public abstract class AbstractCombination implements Comparable<AbstractCombination>, ICombinationFinder {
 
     protected int rank;
     public int getRank() {

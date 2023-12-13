@@ -1,4 +1,6 @@
-package ru.cs.vsu.oop.poker.base;
+package ru.cs.vsu.oop.poker.base.combinations;
+
+import ru.cs.vsu.oop.poker.base.Card;
 
 import java.util.LinkedList;
 
