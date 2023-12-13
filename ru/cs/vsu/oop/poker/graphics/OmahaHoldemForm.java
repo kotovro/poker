@@ -172,18 +172,18 @@ public class OmahaHoldemForm extends JFrame {
             if (player.isBot()) {
                 botPanels[i].setVisible(true);
                 names[i].setText("Bot player " + (i + 1));
-                cards1[i].setIcon(getIconForCard(((OmahaHoldemPlayer) player).getOwnHand(0), params.isXRayEnabled()));
-                cards2[i].setIcon(getIconForCard(((OmahaHoldemPlayer) player).getOwnHand(1), params.isXRayEnabled()));
-                cards3[i].setIcon(getIconForCard(((OmahaHoldemPlayer) player).getOwnHand(2), params.isXRayEnabled()));
-                cards4[i].setIcon(getIconForCard(((OmahaHoldemPlayer) player).getOwnHand(3), params.isXRayEnabled()));
+                cards1[i].setIcon(getIconForCard(((OmahaHoldemPlayer) player).getOwnHand(0), params.isXRayEnabled(), getClass()));
+                cards2[i].setIcon(getIconForCard(((OmahaHoldemPlayer) player).getOwnHand(1), params.isXRayEnabled(), getClass()));
+                cards3[i].setIcon(getIconForCard(((OmahaHoldemPlayer) player).getOwnHand(2), params.isXRayEnabled(), getClass()));
+                cards4[i].setIcon(getIconForCard(((OmahaHoldemPlayer) player).getOwnHand(3), params.isXRayEnabled(), getClass()));
             }
             i++;
         }
         hideUnusedBots(players.size());
-        lblHumanCard1.setIcon(getIconForCard(humanPlayer.getOwnHand(0), true));
-        lblHumanCard2.setIcon(getIconForCard(humanPlayer.getOwnHand(1), true));
-        lblHumanCard3.setIcon(getIconForCard(humanPlayer.getOwnHand(2), true));
-        lblHumanCard4.setIcon(getIconForCard(humanPlayer.getOwnHand(3), true));
+        lblHumanCard1.setIcon(getIconForCard(humanPlayer.getOwnHand(0), true, getClass()));
+        lblHumanCard2.setIcon(getIconForCard(humanPlayer.getOwnHand(1), true, getClass()));
+        lblHumanCard3.setIcon(getIconForCard(humanPlayer.getOwnHand(2), true, getClass()));
+        lblHumanCard4.setIcon(getIconForCard(humanPlayer.getOwnHand(3), true, getClass()));
         panelTable.setPreferredSize(new Dimension(800, 800));
         showGameState();
     }
@@ -228,7 +228,7 @@ public class OmahaHoldemForm extends JFrame {
     private void drawEmptyCards(JLabel[] labels) {
         for (JLabel lbl: labels) {
             lbl.setText("");
-            lbl.setIcon(getIconForCard(null, false));
+            lbl.setIcon(getIconForCard(null, false, getClass()));
         }
     }
     private void hideUnusedBots(int players) {
@@ -283,10 +283,10 @@ public class OmahaHoldemForm extends JFrame {
         boolean showCard = player == game.getHumanPlayer()
                 || params.isXRayEnabled()
                 || game.getState() == Game.FINISHED && game.getActivePlayersCount() > 1;
-        cards1[playerNum].setIcon(getIconForCard(player.getOwnHand(0), showCard));
-        cards2[playerNum].setIcon(getIconForCard(player.getOwnHand(1), showCard));
-        cards3[playerNum].setIcon(getIconForCard(player.getOwnHand(2), showCard));
-        cards4[playerNum].setIcon(getIconForCard(player.getOwnHand(3), showCard));
+        cards1[playerNum].setIcon(getIconForCard(player.getOwnHand(0), showCard, getClass()));
+        cards2[playerNum].setIcon(getIconForCard(player.getOwnHand(1), showCard, getClass()));
+        cards3[playerNum].setIcon(getIconForCard(player.getOwnHand(2), showCard, getClass()));
+        cards4[playerNum].setIcon(getIconForCard(player.getOwnHand(3), showCard, getClass()));
 
     }
 
@@ -313,11 +313,11 @@ public class OmahaHoldemForm extends JFrame {
     private void showTable() {
         int i = 0;
         for (Card card: game.getTable()) {
-            tableCards[i].setIcon(getIconForCard(card, true));
+            tableCards[i].setIcon(getIconForCard(card, true, getClass()));
             i++;
         }
         for (int j = i; j < 5; j++) {
-            tableCards[j].setIcon(getIconForCard(null, true));
+            tableCards[j].setIcon(getIconForCard(null, true, getClass()));
         }
     }
 

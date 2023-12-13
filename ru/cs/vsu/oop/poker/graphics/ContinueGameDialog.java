@@ -145,7 +145,7 @@ public class ContinueGameDialog extends JDialog {
     private void showHand(JLabel[] cards, UniversalHand hand) {
         for(int i = 0; i < 5; i++) {
             cards[i].setText("");
-            cards[i].setIcon(getIconForCard(hand.getBestHand().get(i), true));
+            cards[i].setIcon(getIconForCard(hand.getBestHand().get(i), true, getClass()));
         }
     }
 }

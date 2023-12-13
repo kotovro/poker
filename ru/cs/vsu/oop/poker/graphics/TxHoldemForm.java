@@ -155,14 +155,14 @@ public class TxHoldemForm extends JFrame {
             if (player.isBot()) {
                 botPanels[i].setVisible(true);
                 names[i].setText(player.getName());
-                cards1[i].setIcon(getIconForCard(((TxHoldemPlayer)player).getOwnHand(0), params.isXRayEnabled()));
-                cards2[i].setIcon(getIconForCard(((TxHoldemPlayer)player).getOwnHand(1), params.isXRayEnabled()));
+                cards1[i].setIcon(getIconForCard(((TxHoldemPlayer)player).getOwnHand(0), params.isXRayEnabled(), getClass()));
+                cards2[i].setIcon(getIconForCard(((TxHoldemPlayer)player).getOwnHand(1), params.isXRayEnabled(), getClass()));
             }
             i++;
         }
         hideUnusedBots(players.size());
-        lblHumanCard1.setIcon(getIconForCard(humanPlayer.getOwnHand(0), true));
-        lblHumanCard2.setIcon(getIconForCard(humanPlayer.getOwnHand(1), true));
+        lblHumanCard1.setIcon(getIconForCard(humanPlayer.getOwnHand(0), true, getClass()));
+        lblHumanCard2.setIcon(getIconForCard(humanPlayer.getOwnHand(1), true, getClass()));
         panelTable.setPreferredSize(new Dimension(900, 900));
         showGameState();
     }
@@ -205,7 +205,7 @@ public class TxHoldemForm extends JFrame {
     private void drawEmptyCards(JLabel[] labels) {
         for (JLabel lbl: labels) {
             lbl.setText("");
-            lbl.setIcon(getIconForCard(null, false));
+            lbl.setIcon(getIconForCard(null, false, getClass()));
         }
     }
     private void hideUnusedBots(int players) {
@@ -260,8 +260,8 @@ public class TxHoldemForm extends JFrame {
         boolean showCard = player == game.getHumanPlayer()
                 || params.isXRayEnabled()
                 || game.getState() == Game.FINISHED && game.getActivePlayersCount() > 1;
-        cards1[playerNum].setIcon(getIconForCard(player.getOwnHand(0), showCard));
-        cards2[playerNum].setIcon(getIconForCard(player.getOwnHand(1), showCard));
+        cards1[playerNum].setIcon(getIconForCard(player.getOwnHand(0), showCard, getClass()));
+        cards2[playerNum].setIcon(getIconForCard(player.getOwnHand(1), showCard, getClass()));
     }
 
     private void showContinueGameDialogue() {
@@ -286,11 +286,11 @@ public class TxHoldemForm extends JFrame {
     private void showTable() {
         int i = 0;
         for (Card card: game.getTable()) {
-            tableCards[i].setIcon(getIconForCard(card, true));
+            tableCards[i].setIcon(getIconForCard(card, true, getClass()));
             i++;
         }
         for (int j = i; j < 5; j++) {
-            tableCards[j].setIcon(getIconForCard(null, true));
+            tableCards[j].setIcon(getIconForCard(null, true, getClass()));
         }
     }
 
