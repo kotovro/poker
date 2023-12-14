@@ -30,14 +30,15 @@ public class OmahaHoldemGame extends Game {
         this.inStreet = false;
         this.betStep = budget / 100;
     }
-    public void doStep(int humanAction) {
+    public LinkedList<Game> doStep(int humanAction) {
+        LinkedList<Game> gameStates = new LinkedList<>();
         if (inStreet) {
             if (humanAction == STOP_BETS) {
                 stopStreet();
             } else {
-                int result = doBetRound();
+                int result = doBetRound(gameStates);
                 if (result == CONTINUE_BETS) {
-                    return;
+                    return gameStates;
                 } else if (result == FINISH_GAME) {
                     state = FINISHED;
                 }
@@ -52,7 +53,7 @@ public class OmahaHoldemGame extends Game {
                 }
                 state = FLOP;
                 startStreet();
-                doBetRound();
+                doBetRound(gameStates);
             }
             case FLOP -> {
                 for (int i = 0; i < 3; i++) {
@@ -60,19 +61,19 @@ public class OmahaHoldemGame extends Game {
                 }
                 state = TERN;
                 startStreet();
-                doBetRound();
+                doBetRound(gameStates);
             }
             case TERN -> {
                 table.add(deck.drawCard());
                 state = REAVER;
                 startStreet();
-                doBetRound();
+                doBetRound(gameStates);
             }
             case REAVER -> {
                 table.add(deck.drawCard());
                 state = FINISHED;
                 startStreet();
-                doBetRound();
+                doBetRound(gameStates);
             }
             case FINISHED -> {
                 winners = getGameWinners(true);
@@ -81,6 +82,7 @@ public class OmahaHoldemGame extends Game {
                 }
             }
         }
+        return gameStates;
     }
     @Override
     protected LinkedList<Player> getGameWinners(boolean tryGetSingleWinner) {

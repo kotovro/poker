@@ -85,6 +85,7 @@ public class Game implements Cloneable {
     public void continueGame() {
         this.bank = 0;
         this.deck = new Deck();
+        this.deck.shuffle();
         this.players = this.players.stream()
                 .filter(p -> p.getBudget() >= this.betStep)
                 .collect(Collectors.toCollection(LinkedList::new));
@@ -93,6 +94,10 @@ public class Game implements Cloneable {
             p.clearCurrentBet();
             p.clearHand();
         });
+    }
+
+    public int getCurBotIdx() {
+        return curBotIdx;
     }
 
     private void removePoorPlayer(Player player) {

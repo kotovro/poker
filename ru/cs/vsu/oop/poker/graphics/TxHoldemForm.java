@@ -9,6 +9,7 @@ import ru.cs.vsu.oop.poker.games.logic.texasholdem.TxHoldemPlayer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.Stack;
@@ -86,6 +87,8 @@ public class TxHoldemForm extends JFrame {
     private JLabel lblTableCard3;
     private JLabel lblTableCard4;
     private JLabel lblTableCard5;
+    private JButton btnRun;
+    private JButton btnUndo;
 
     private TxHoldemGame game;
     private JLabel[] names = {lblPlayer1Name, lblPlayer2Name, lblPlayer3Name, lblPlayer4Name, lblPlayer5Name, lblPlayer6Name};
@@ -103,15 +106,16 @@ public class TxHoldemForm extends JFrame {
     private ParamsDialog dialogParams = new ParamsDialog(this.panelTable, params, e -> {
         newGame();
     });
+    private Stack<Game> gameStack;
 
     public TxHoldemForm() {
         initControls();
-        Stack<Game> gameStack = new Stack<>();
+
 
         btnFold.addActionListener(e -> {
             humanPlayer.setLastAction(Player.ACTION_FOLD);
             while (game.getState() != Game.FINISHED) {
-                gameStack.addAll(game.doStep(Game.CONTINUE_BETS));
+                game.doStep(Game.CONTINUE_BETS);
             }
             showGameState();
         });
@@ -141,6 +145,18 @@ public class TxHoldemForm extends JFrame {
             gameStack.addAll(game.doStep(Game.CONTINUE_BETS));
             showGameState();
         });
+
+        btnUndo.addActionListener(e -> {
+            this.game = (TxHoldemGame) gameStack.pop();
+            this.humanPlayer = (TxHoldemPlayer) this.game.getHumanPlayer();
+            showGameState();
+        });
+
+        btnRun.addActionListener(e -> {
+            gameStack.addAll(game.doStep(Game.CONTINUE_BETS));
+            showGameState();
+        });
+
         this.setTitle("Texas hold'em poker game");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
@@ -155,8 +171,9 @@ public class TxHoldemForm extends JFrame {
     }
 
     private void startGame() {
+        gameStack = new Stack<>();
         LinkedList<Player> players = game.getPlayers();
-        game.doStep(Game.CONTINUE_BETS);
+        gameStack.addAll(game.doStep(Game.CONTINUE_BETS));
         int i = 0;
         for (Player player: players) {
             if (player.isBot()) {
@@ -242,13 +259,21 @@ public class TxHoldemForm extends JFrame {
         lblHumanState.setText("Your last action: " + humanPlayer.getLastActionName());
         lblBank.setText("Bank: " + String.format("%.2f", game.getBank()));
         showTable();
-        if (game.getState() == Game.FINISHED) {
+
+        btnUndo.setEnabled(gameStack.size() != 0);
+
+        if (this.game.getCurBotIdx() != 0 || game.getState() == Game.FINISHED || game.getState() == TxHoldemGame.IN_STREET && gameStack.size() == 0) {
             btnFold.setEnabled(false);
             btnStay.setEnabled(false);
             btnCall.setEnabled(false);
             btnRaise.setEnabled(false);
-            showContinueGameDialogue();
+            if (game.getState() == Game.FINISHED) {
+                showContinueGameDialogue();
+            } else {
+                btnRun.setEnabled(true);
+            }
         } else {
+            btnRun.setEnabled(false);
             boolean canStay = humanPlayer.canStay(game.getCurrentBet());
             boolean canCall = !canStay && humanPlayer.canRise(game.getCurrentBet(), 0);
             boolean canRise = humanPlayer.canRise(game.getCurrentBet(), game.getBetStep());

@@ -98,7 +98,9 @@ public class Player implements Cloneable {
     public Player clone() {
         try {
             Player clone = (Player) super.clone();
-            clone.hand = this.hand.clone();
+            if(this.hand != null) {
+                clone.hand = this.hand.clone();
+            }
             return clone;
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();

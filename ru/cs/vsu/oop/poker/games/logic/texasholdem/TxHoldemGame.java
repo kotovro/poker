@@ -11,10 +11,10 @@ import java.util.LinkedList;
 public class TxHoldemGame extends Game implements Cloneable {
     private LinkedList<Card> table = new LinkedList<>();
 
-    private static final int PREFLOP = 0;
-    private static final int FLOP = 1;
-    private static final int TERN = 2;
-    private static final int REAVER = 3;
+    public static final int PREFLOP = 0;
+    public static final int FLOP = 1;
+    public static final int TERN = 2;
+    public static final int REAVER = 3;
 
     public TxHoldemGame(int numberOfBots, double budget) {
         players = new LinkedList<>();
